@@ -1,8 +1,11 @@
+import Navbar from "./components/Navbar/Navbar"
+import TrendsSectionComponent from "./components/TrendsSectionComponent/TrendsSectionComponent"
 
 const App = () => {
   return (
-    <div className=' text-amber-400 text-4xl text-center'>
-      Hello from style.loom 
+    <div className=' bg-black06'>
+      <Navbar />
+      <TrendsSectionComponent />
     </div>
   )
 }

@@ -1,105 +1,39 @@
 @import "tailwindcss";
-
-@custom-variant dark (&:where(.dark, .dark *));
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 @theme {
-  --color-primarybg: #0F0F0F;
-  --color-secondary: #FF5722;
+    /* 🎨 Brown palette */
+    --color-brown60: #ae9b84;
+    --color-brown65: #b8a893;
+    --color-brown70: #c2b4a3;
+    --color-brown80: #d6cdc2;
+    --color-brown90: #ebe6e0;
+    --color-brown95: #f5f3f0;
+    --color-brown97: #f9f8f6;
+    --color-brown99: #fdfdfc;
 
-  /* dark */
-  --color-dark-10: #1A1A1A;
-  --color-dark-12: #1F1F1F;
-  --color-dark-15: #262626;
-  --color-dark-20: #333333;
-  --color-dark-30: #4D4D4D; 
+    /* 🖤 Black palette */
+    --color-black06: #0f0f0f;
+    --color-black10: #1a1a1a;
+    --color-black12: #1f1f1f;
+    --color-black15: #262626;
+    --color-black20: #333333;
+    --color-black25: #404040;
+    --color-black30: #4d4d4d;
+    --color-black35: #595959;
 
-  /* gray */
-  --color-gray-40: #676665;
-  --color-gray-50: #81807E;
-  --color-gray-70: #B3B3B2;
-  --color-gray-80: #CCCCCC;
-  --color-Very-Dark-Gray: #404040;
+    /* ⚪ Gray palette */
+    --color-gray40: #676665;
+    --color-gray50: #81807e;
+    --color-gray70: #b3b3b2;
+    --color-gray80: #cccccc;
+    --color-gray90: #e6e6e6;
+    --color-gray95: #f2f2f2;
+    --color-gray97: #f7f7f7;
+    --color-gray99: #fcfcfc;
 
-  /* brown */
-  --color-brown-60: #AE9B84;
-  --color-brown-70: #C2B4A3;
-  --color-brown-80: #D6CDC2;
-
-  /* green */
-  --color-green: #8AF265;
-  --color-green-dark: #152011;
-
-  --breakpoint-my-media: 1430px;
 }
 
-@layer utilities {
-  .font-roboto {
+body {
     font-family: 'Roboto', sans-serif;
-  }
-
-  .font-robotmono {
-    font-family: 'Roboto Mono', monospace;
-  }
-
-  .hide-scrollbar::-webkit-scrollbar {
-    height: 0px;
-    display: none;
-  }
-
-  .hide-scrollbar {
-    scrollbar-width: none;        
-    -ms-overflow-style: none; 
-  }
-}
-::-webkit-scrollbar {
-  width: 10px; 
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-Very-Dark-Gray); 
-  border-radius: 8px; 
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gray-40);
-}
-
-.dark ::-webkit-scrollbar-track {
-  background: var(--color-dark-12); 
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: var(--color-brown-80); 
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-brown-60);
-}
-
-::-webkit-scrollbar {
-  width: 8px; 
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #1A1A1A; 
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #AE9B84;
-  border-radius: 9999px; 
-  border: 2px solid #1A1A1A;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #C2B4A3; 
-}
-
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #AE9B84 #1A1A1A; 
 }
