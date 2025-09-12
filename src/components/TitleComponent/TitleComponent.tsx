@@ -3,6 +3,7 @@ interface TitleComponentProps {
     title: string;
     desc: string;
     img?: string;
+    imgMobile?: boolean;
     fullImage?: boolean;
 }
 
@@ -10,11 +11,12 @@ export default function TitleComponent({
     title,
     desc,
     img,
+    imgMobile,
     fullImage = false,
 }: TitleComponentProps) {
     return (
         <div
-            className={`relative text-white max-w-full ${fullImage ? "overflow-hidden" : ""
+            className={`relative text-white max-w-full  ${fullImage ? "overflow-hidden" : ""
                 } pt-[80px] pr-0 px-[80px] sm:pt-[60px] sm:pl-[60px] lg:pt-[50px] lg:pl-[50px] md:pt-[40px] md:pl-[40px] xs:pt-[30px] xs:px-[20px]`}
         >
             <div
@@ -35,7 +37,7 @@ export default function TitleComponent({
                 <img
                     src={img}
                     alt="star icon"
-                    className="absolute top-0 right-0 sm:-top-[55px] sm:-right-[49px] sm:w-[280px] sm:h-[280px] lg:w-[240px] lg:h-[240px] md:w-[220px] md:h-[220px] xs:hidden"
+                    className={` ${imgMobile? " hidden md:block":""} absolute top-0 right-0 sm:-top-[55px] sm:-right-[49px] sm:w-[280px] sm:h-[280px] lg:w-[240px] lg:h-[240px] md:w-[220px] md:h-[220px] xs:hidden`}
                 />
             }
 
