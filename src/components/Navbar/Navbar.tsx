@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { FiUserPlus } from "react-icons/fi";
 import logo from "./../../assets/imgs/logo.png";
 import basket from "./../../assets/imgs/NavBar/Union.png";
 import ToggleIcon from "./../../assets/imgs/NavBar/Icon.png";
@@ -54,8 +55,14 @@ export default function Navbar() {
                     {/* right buttons */}
                     <div className="flex gap-[14px] items-center">
                         <Link to="/cart">
-                            <button className="rounded-[12px] p-[18px] bg-[color:var(--color-black10)] border-0">
+                            <button className="rounded-[12px] p-[18px] bg-[color:var(--color-black10)] border-0 cursor-pointer">
                                 <img src={basket} alt="basket" className="w-[24px] h-[24px]" />
+                            </button>
+                        </Link>
+
+                        <Link to="/login" onClick={() => setActiveLink("/login")}>
+                            <button className="rounded-[12px] p-[18px] bg-[color:var(--color-black10)] border-0 flex items-center gap-2 text-[color:var(--color-gray70)] cursor-pointer">
+                                <FiUserPlus className="w-[24px] h-[24px]" />
                             </button>
                         </Link>
 
@@ -117,6 +124,12 @@ export default function Navbar() {
                                 className={`rounded-[12px] text-[18px] cursor-pointer py-[18px] px-[30px] w-[270px] ${activeLink === "/products" ? 'bg-[color:var(--color-black10)] text-[color:var(--color-gray70)]' : 'bg-transparent text-[color:var(--color-gray70)] border-[1.5px] border-dashed border-[color:var(--color-black15)]'}`}
                             >
                                 Products
+                            </button>
+                        </Link>
+
+                        <Link to="/register" onClick={() => { setActiveLink("/login"); setMenuOpen(false); }}>
+                            <button className="rounded-[12px] text-[18px]    font-medium cursor-pointer bg-[color:var(--color-black10)] py-[18px] px-[30px] w-[270px] flex justify-center items-center gap-2 text-[color:var(--color-gray70)]">
+                                <FiUserPlus className="w-[20px] h-[20px]" /> Register
                             </button>
                         </Link>
 

@@ -37,3 +37,27 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
+
+::-webkit-scrollbar {
+  width: 8px; 
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1A1A1A; 
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #AE9B84;
+  border-radius: 9999px; 
+  border: 2px solid #1A1A1A;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #C2B4A3; 
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #AE9B84 #1A1A1A; 
+}

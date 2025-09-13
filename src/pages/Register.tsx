@@ -1,0 +1,170 @@
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+
+export default function RegisterPage() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    if (!username) {
+      setError("Username is required");
+      return;
+    }
+    if (!email) {
+      setError("Email is required");
+      return;
+    }
+    if (!password) {
+      setError("Password is required");
+      return;
+    }
+
+    setLoading(true);
+    // simulate registration API call
+    setTimeout(() => {
+      setLoading(false);
+      navigate("/dashboard");
+    }, 800);
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-black06 p-6">
+      <div className="w-full max-w-md pt-27">
+        <div className="bg-gradient-to-br from-black06/60 to-[#111111]/60 p-8 rounded-2xl shadow-2xl border border-[#222]">
+          <div className="mb-6 text-center">
+            <div className="mx-auto w-16 h-16 flex items-center justify-center">
+              <img src="/Clip path group (2).svg" alt="icon" />
+            </div>
+            <h1 className="mt-4 text-2xl font-semibold text-white">
+              Create Account
+            </h1>
+            <p className="mt-1 text-sm text-brown60">
+              Welcome — create your new account
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="text-sm text-red-400 bg-[#2b1510] p-2 rounded">
+                {error}
+              </div>
+            )}
+
+            {/* Username */}
+            <div>
+              <label
+                className="block text-sm mb-2 text-brown60"
+                htmlFor="username"
+              >
+                Username
+              </label>
+              <input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white placeholder-[#7e7e7e] outline-none border border-[#1e1e1e] focus:border-brown60 focus:ring-2 focus:ring-brown60/20 transition"
+                placeholder="Enter your username"
+              />
+            </div>
+
+            {/* Email */}
+            <div>
+              <label
+                className="block text-sm mb-2 text-brown60"
+                htmlFor="email"
+              >
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white placeholder-[#7e7e7e] outline-none border border-[#1e1e1e] focus:border-brown60 focus:ring-2 focus:ring-brown60/20 transition"
+                placeholder="example@domain.com"
+                autoComplete="email"
+              />
+            </div>
+
+            {/* Password */}
+            <div>
+              <label
+                className="block text-sm mb-2 text-brown60"
+                htmlFor="password"
+              >
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white placeholder-[#7e7e7e] outline-none border border-[#1e1e1e] focus:border-brown60 focus:ring-2 focus:ring-brown60/20 transition pr-10"
+                  placeholder="Create a password"
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#cfc6bb] hover:text-brown60"
+                >
+                  {showPassword ? (
+                    <FiEyeOff className="w-5 h-5" />
+                  ) : (
+                    <FiEye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 rounded-lg text-black font-semibold shadow-sm 
+             bg-gradient-to-r from-[#ae9b84] via-[#90715b] to-[#ae9b84]
+             bg-[length:300%_100%] bg-left
+             transition-all duration-700
+             hover:bg-right hover:shadow-xl disabled:opacity-60 cursor-pointer"
+            >
+              {loading ? "Creating account..." : "Register"}
+            </button>
+
+            {/* Login link */}
+            <div className="text-center mt-2 text-sm text-brown60">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="font-medium text-brown60 hover:underline"
+              >
+                Sign in
+              </Link>
+            </div>
+          </form>
+        </div>
+
+        <p className="mt-6 text-center text-xs text-[#7a7470]">
+          By registering, you agree to our{" "}
+          <a href="/terms" className="text-brown60">
+            Terms
+          </a>{" "}
+          and{" "}
+          <a href="/privacy" className="text-brown60">
+            Privacy Policy
+          </a>
+          .
+        </p>
+      </div>
+    </div>
+  );
+}
