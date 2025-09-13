@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
+
+// صفحات
 import TrendsSectionComponent from "./components/TrendsSectionComponent/TrendsSectionComponent";
 import StepsComponent from "./components/StepsComponent/StepsComponent";
-
-// صفحات تسجيل الدخول والتسجيل
 import Login from './pages/Login';
 import Register from "./pages/Register";
 
@@ -12,13 +12,20 @@ const App = () => {
     <div className="bg-black06 min-h-screen">
       <Navbar />
 
-      {/* المكونات الرئيسية */}
-      <TrendsSectionComponent />
-      <StepsComponent />
-
       {/* الراوتينغ */}
       <Routes>
-        <Route path="/" element={<TrendsSectionComponent />} />
+        {/* الصفحة الرئيسية */}
+        <Route
+          path="/"
+          element={
+            <>
+              <TrendsSectionComponent />
+              <StepsComponent />
+            </>
+          }
+        />
+
+        {/* صفحات الـ Auth */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
@@ -27,3 +34,4 @@ const App = () => {
 };
 
 export default App;
+
