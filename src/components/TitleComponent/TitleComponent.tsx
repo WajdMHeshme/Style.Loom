@@ -23,7 +23,7 @@ export default function TitleComponent({
                 className="pb-[80px] max-w-[79.603%] sm:max-w-[85.463%] sm:pb-[60px] lg:max-w-[82.463%] lg:pb-[50px] md:max-w-[78%] md:pb-[40px] xs:max-w-full xs:pb-0"
             >
                 <h2
-                    className="uppercase font-medium text-[48px] leading-[56.25px] mb-[30px] sm:text-[38px] sm:leading-[44.53px] sm:mb-[24px] lg:text-[35px] lg:leading-[41.53px] lg:mb-[22px] md:text-[32px] md:leading-[38px] md:mb-[20px] xs:text-[28px] xs:leading-[32.81px]"
+                    className="uppercase font-medium text-[24px] leading-[56.25px] mb-[30px] sm:text-[30px] lg:text-[48px] sm:leading-[44.53px] sm:mb-[24px] lg:leading-[41.53px] lg:mb-[22px] md:text-[32px] md:leading-[38px] md:mb-[20px] xs:text-[28px] xs:leading-[32.81px]"
                 >
                     {title}
                 </h2>

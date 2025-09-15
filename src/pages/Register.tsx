@@ -41,7 +41,7 @@ export default function RegisterPage() {
         <div className="bg-gradient-to-br from-black06/60 to-[#111111]/60 p-8 rounded-2xl shadow-2xl border border-[#222]">
           <div className="mb-6 text-center">
             <div className="mx-auto w-16 h-16 flex items-center justify-center">
-              <img src="/Clip path group (2).svg" alt="icon" />
+              <img src="/Clippathgroup.svg" alt="icon" />
             </div>
             <h1 className="mt-4 text-2xl font-semibold text-white">
               Create Account

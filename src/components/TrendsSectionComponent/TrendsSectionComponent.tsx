@@ -19,7 +19,7 @@ export default function TrendsSectionComponent() {
 
     return (
         <section className="2xl:px-[162px] md:px-[80px] px-[16px] py-[200px]  ">
-            <div className="border-2 border-black15 rounded-xl">
+            <div className="border-2 border-dashed border-black15 rounded-xl">
                 <TitleComponent
                     title="Crafting Trends, Inspiring Confidence"
                     desc="Explore a world of fashion at StyleLoom, where trends meet affordability."
