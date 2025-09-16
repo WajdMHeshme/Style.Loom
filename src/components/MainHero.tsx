@@ -36,7 +36,7 @@ export default function HeroComponent() {
   }, []);
 
   return (
-    <div className="2xl:px-[162px] md:px-[80px] px-[16px] py-[200px]">
+    <div className="2xl:px-[162px] md:px-[80px] px-[16px] pt-[200px]">
       <div className="rounded-[20px] overflow-hidden border-dashed border-2 border-[#262626]">
         {/* الصورة */}
         <div className="relative">

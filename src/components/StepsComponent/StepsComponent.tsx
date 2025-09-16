@@ -4,7 +4,7 @@ import { stepsData } from "./../../Data/stepsData";
 
 function StepsComponent() {
     return (
-        <div className=" 2xl:px-[162px] md:px-[80px] px-[16px] pt-[100px]">
+        <div className=" 2xl:px-[162px] md:px-[80px] px-[16px] pt-[200px]">
             <div className="relative flex flex-col items-center justify-center rounded-[20px] border-2 border-dashed border-[#262626] bg-black06 overflow-hidden">
                 {/* Title */}
                 <div className="w-full">

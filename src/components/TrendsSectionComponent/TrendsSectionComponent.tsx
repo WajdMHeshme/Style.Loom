@@ -18,7 +18,7 @@ export default function TrendsSectionComponent() {
     }, []);
 
     return (
-        <section className="2xl:px-[162px] md:px-[80px] px-[16px] py-[200px]  ">
+        <section className="2xl:px-[162px] md:px-[80px] px-[16px] pt-[200px]  ">
             <div className="border-2 border-dashed border-black15 rounded-xl">
                 <TitleComponent
                     title="Crafting Trends, Inspiring Confidence"

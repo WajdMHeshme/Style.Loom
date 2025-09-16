@@ -1,13 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
-
-// صفحات
-import TrendsSectionComponent from "./components/TrendsSectionComponent/TrendsSectionComponent";
-import StepsComponent from "./components/StepsComponent/StepsComponent";
-import MainHero from './components/MainHero';
 import Login from './pages/Login';
 import Register from "./pages/Register";
 import Footer from "./components/Footer/Footer";
+import Home from "./pages/Home";
+import Cart from "./pages/Cart";
 
 const App = () => {
   return (
@@ -17,25 +14,15 @@ const App = () => {
       {/* الراوتينغ */}
       <Routes>
         {/* الصفحة الرئيسية */}
-        <Route
-          path="/"
-          element={
-            <>
-              <MainHero />
-              <TrendsSectionComponent />
-              <StepsComponent />
-              <Footer />
-            </>
-          }
-        />
-        
-
+        <Route path="/"element={<Home />}/>
+        <Route path="/cart" element={<Cart />} />
         {/* صفحات الـ Auth */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
+      <Footer />
     </div>
-    
+
   );
 };
 
