@@ -1,4 +1,3 @@
-import React from "react";
 
 interface TrendsCardProps {
     data: {
@@ -12,7 +11,7 @@ interface TrendsCardProps {
     total: number;
 }
 
-export default function TrendsCardComponent({ data, index, total }: TrendsCardProps) {
+export default function TrendsCardComponent({ data, index }: TrendsCardProps) {
     // Determine border-right removal based on index (like nth-child in CSS)
     let borderRightClass = "border-r-2 border-dashed border-black15";
     if ((index + 1) % 3 === 0 && window.innerWidth >= 1200) borderRightClass = "border-r-0";

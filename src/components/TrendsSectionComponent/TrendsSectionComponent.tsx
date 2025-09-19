@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { StoredTrendsData } from "../../Data/TrendsData";
 import TrendsCardComponent from "./TrendsCardComponent";
 import TitleComponent from "../TitleComponent/TitleComponent";
