@@ -1,6 +1,5 @@
-import React from "react";
-import Design from "./../../assets/imgs/Testimonials/Design.png";
 
+import Design from "./../../assets/imgs/Testimonials/Design.png";
 interface TestimonialCardProps {
   person: string;
   personName: string;

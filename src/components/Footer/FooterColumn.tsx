@@ -33,7 +33,7 @@ export default function FooterColumn({ ColumnLink, items, isSubscrbe }: FooterCo
                         <input
                             type="email"
                             placeholder="Your Email"
-                            className="w-full font-normal text-sm  2xl:text-xl leading-[150%] font-robotmono text-gray40 cursor-pointer overflow-hidden border-0" />
+                            className="w-full font-normal outline-0 text-sm  2xl:text-xl leading-[150%] font-robotmono text-gray40 cursor-pointer overflow-hidden border-0" />
                         <button type="submit"><MdAlternateEmail color="#676665"/></button>
                     </form>
 
