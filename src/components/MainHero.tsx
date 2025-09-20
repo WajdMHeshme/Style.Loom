@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import img from "./../assets/imgs/Hero/img-13.webp";
 import { tabData } from "../Data/HeroCompData";
 import CountUp from "react-countup";
-import icon from "./../assets/imgs/Icons/Icon-8.png";
 
 // تعريف نوع البيانات القادمة من tabData
 interface TabContent {
@@ -41,7 +39,7 @@ export default function HeroComponent() {
         {/* الصورة */}
         <div className="relative">
          <img 
-  src={img} 
+  src={"/assets/imgs/Hero/img-13.webp"} 
   alt="img" 
   className="
     w-full 
@@ -70,7 +68,7 @@ export default function HeroComponent() {
   <span className="flex items-center text-[12px] lg:text-lg gap-1 font-medium">
     Shop Now
     <span className="hidden sm:block">
-      <img src={icon} alt="arrow" className="w-4 h-4 inline-block" />
+      <img src={"/assets/imgs/Icons/Icon-8.png"} alt="arrow" className="w-4 h-4 inline-block" />
     </span>
   </span>
 

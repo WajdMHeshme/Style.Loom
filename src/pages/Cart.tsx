@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
 import { GoX, GoArrowLeft } from "react-icons/go";
-import visa from "../assets/imgs/checkout/visa.svg";
-import paypal from "../assets/imgs/checkout/paypal.svg";
-import mastercard from "../assets/imgs/checkout/mastercard.svg";
-import applepay from "../assets/imgs/checkout/applepay.svg";
-import test from "../assets/imgs/Products/Image-7.webp";
 
 type CartItem = {
     id: number;
@@ -20,8 +15,8 @@ export default function Cart() {
         return storedCart
             ? JSON.parse(storedCart)
             : [
-                { id: 1, name: "Timeless A-line Evening Dress", price: 54.99, quantity: 2, image: test },
-                { id: 2, name: "Classic Suit", price: 120.0, quantity: 1, image: test },
+                { id: 1, name: "Timeless A-line Evening Dress", price: 54.99, quantity: 2, image: "/assets/imgs/Products/Image-7.webp" },
+                { id: 2, name: "Classic Suit", price: 120.0, quantity: 1, image: "/assets/imgs/Products/Image-7.webp" },
             ];
     });
 
@@ -47,10 +42,10 @@ export default function Cart() {
     const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
 
     const paymentMethods = [
-        { id: "visa", name: "Visa", image: visa },
-        { id: "mastercard", name: "MasterCard", image: mastercard },
-        { id: "paypal", name: "PayPal", image: paypal },
-        { id: "applepay", name: "Apple Pay", image: applepay },
+        { id: "visa", name: "Visa", image: "/assets/imgs/checkout/visa.svg" },
+        { id: "mastercard", name: "MasterCard", image: "/assets/imgs/checkout/mastercard.svg" },
+        { id: "paypal", name: "PayPal", image: "/assets/imgs/checkout/paypal.svg" },
+        { id: "applepay", name: "Apple Pay", image: "/assets/imgs/checkout/applepay.svg" },
     ];
 
     return (

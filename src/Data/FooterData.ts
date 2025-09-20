@@ -1,7 +1,7 @@
-import InstagramIcon from "../assets/imgs/Icons/instagram.png"
-import BasketIcon from "../assets/imgs/Icons/basket.png"
-import TwitterIcon from '../assets/imgs/Icons/twitter.png'
-import BeIcon from '../assets/imgs/Icons/Be.png'
+
+
+
+
 export const InfinitScrollData =
     [
         "TANK TOP",
@@ -13,10 +13,10 @@ export const InfinitScrollData =
         "MUSCLE SHIRT"
     ];
 export const FooterMediaData = [
-    InstagramIcon,
-    BasketIcon,
-    TwitterIcon,
-    BeIcon
+    "/assets/imgs/Icons/instagram.png",
+    "/assets/imgs/Icons/basket.png",
+    "/assets/imgs/Icons/twitter.png",
+    "/assets/imgs/Icons/Be.png"
 ]
 export const FooterColumnData = [
     {

@@ -1,5 +1,4 @@
 import type { FC } from "react";
-import vector from "../assets/imgs/Ad/Vector.webp";
 
 const InfoSection: FC = () => {
   return (
@@ -21,7 +20,7 @@ const InfoSection: FC = () => {
           "
         >
           <img
-            src={vector}
+            src={"/assets/imgs/Ad/Vector.webp"}
             alt=""
             aria-hidden="true"
             className="

@@ -1,13 +1,5 @@
 import React, { useState } from "react";
 import TestimonialCard from "../Testimonials/TestimonalCard";
-import img1 from "./../../assets/imgs/Testimonials/Image-1.png";
-import img2 from "./../../assets/imgs/Testimonials/Image-2.png";
-import img3 from "./../../assets/imgs/Testimonials/Image-3.png";
-import img4 from "./../../assets/imgs/Testimonials/Image-4.png";
-import img5 from "./../../assets/imgs/Testimonials/Image-5.png";
-import img6 from "./../../assets/imgs/Testimonials/Image-6.png";
-import arrow from "./../../assets/imgs/Icons/arrow.png";
-import deecor from "./../../assets/imgs/Testimonials/Abstract Design.png";
 import TitleComponent from "../TitleComponent/TitleComponent";
 
 const TestimonialSection: React.FC = () => {
@@ -19,7 +11,7 @@ const TestimonialSection: React.FC = () => {
       <div className="rounded-t-[20px] overflow-hidden border-2 border-dashed border-black15 relative">
         {/* الصورة: مخفية تحت md */}
         <img
-          src={deecor}
+          src={"/assets/imgs/Testimonials/Abstract Design.png"}
           alt=""
           aria-hidden="true"
           className="hidden md:block pointer-events-none absolute top-0 right-0 translate-x-[10%] -translate-y-[5%] max-w-[18rem] md:max-w-[22rem]"
@@ -41,7 +33,7 @@ const TestimonialSection: React.FC = () => {
             description={
               "StyleLoom exceeded my expectations. The gown's quality and design made me feel like a queen. Fast shipping, too!"
             }
-            person={img1}
+            person={"/assets/imgs/Testimonials/Image-1.png"}
             personCity={"New York, USA"}
             personName={"Sarah Thompson"}
             border={"border1"}
@@ -53,7 +45,7 @@ const TestimonialSection: React.FC = () => {
             description={
               "Absolutely love the style and warmth of the jacket. A perfect blend of fashion and functionality!"
             }
-            person={img2}
+            person={"/assets/imgs/Testimonials/Image-2.png"}
             personCity={"Mumbai, India"}
             personName={"Rajesh Patel"}
             border={"border2"}
@@ -65,7 +57,7 @@ const TestimonialSection: React.FC = () => {
             description={
               "Adorable and comfortable! My daughter loves her new outfit. Thank you, StyleLoom, for dressing our little fashionista."
             }
-            person={img3}
+            person={"/assets/imgs/Testimonials/Image-3.png"}
             personCity={"London, UK"}
             personName={"Emily Walker"}
             border={"border3"}
@@ -78,7 +70,7 @@ const TestimonialSection: React.FC = () => {
             description={
               "Impressed by the quality and style. These shoes turned heads at every event. StyleLoom, you've gained a loyal customer!"
             }
-            person={img4}
+            person={"/assets/imgs/Testimonials/Image-4.png"}
             personCity={"Barcelona, Spain"}
             personName={"Alejandro Martinez"}
             border={"border4"}
@@ -90,7 +82,7 @@ const TestimonialSection: React.FC = () => {
             description={
               "Perfect fit and exceptional quality. These jeans have become my go-to for casual and chic outings."
             }
-            person={img5}
+            person={"/assets/imgs/Testimonials/Image-5.png"}
             personCity={"Delhi, India"}
             personName={"Priya Sharma"}
             border={"border5"}
@@ -102,7 +94,7 @@ const TestimonialSection: React.FC = () => {
             description={
               "Stylish sneakers that don't compromise on comfort. StyleLoom knows how to balance fashion and functionality."
             }
-            person={img6}
+            person={"/assets/imgs/Testimonials/Image-6.png"}
             personCity={"Mexico City, Mexico"}
             personName={"Maria Rodriguez"}
             border={"border6"}
@@ -119,7 +111,7 @@ const TestimonialSection: React.FC = () => {
             >
               <div className="flex items-center justify-center gap-3 text-gray70">
                 <span>View All</span>
-                <img src={arrow} alt="arrow" className="w-5 h-5 ml-3" />
+                <img src={"/assets/imgs/Icons/arrow.png"} alt="arrow" className="w-5 h-5 ml-3" />
               </div>
             </button>
           ) : (

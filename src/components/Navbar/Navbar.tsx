@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FiUserPlus } from "react-icons/fi";
-import logo from "./../../assets/imgs/logo.png";
-import basket from "./../../assets/imgs/NavBar/Union.png";
-import ToggleIcon from "./../../assets/imgs/NavBar/Icon.png";
-import CloseIcon from "./../../assets/imgs/NavBar/close.svg";
 
 export default function Navbar() {
     const [activeLink, setActiveLink] = useState(
@@ -46,7 +42,7 @@ export default function Navbar() {
                     {/* logo (desktop) */}
                     <Link to="/" onClick={() => setActiveLink("/")}>
                         <img
-                            src={logo}
+                            src={"/assets/imgs/Logo.png"}
                             alt="logo"
                             className="w-[151px] h-[28px] object-contain"
                         />
@@ -56,7 +52,7 @@ export default function Navbar() {
                     <div className="flex gap-[14px] items-center">
                         <Link to="/cart">
                             <button className="rounded-[12px] p-[18px] bg-[color:var(--color-black10)] border-0 cursor-pointer">
-                                <img src={basket} alt="basket" className="w-[24px] h-[24px]" />
+                                <img src={"/assets/imgs/NavBar/Union.png"} alt="basket" className="w-[24px] h-[24px]" />
                             </button>
                         </Link>
 
@@ -79,13 +75,13 @@ export default function Navbar() {
                 {/* ---------- Mobile Topbar (<= md) ---------- */}
                 <div className="flex xl:hidden justify-between items-center w-full py-5">
                     <Link to="/" onClick={() => setActiveLink("/")}>
-                        <img src={logo} alt="logo" className="w-[120px] object-contain" />
+                        <img src={"/assets/imgs/logo.png"} alt="logo" className="w-[120px] object-contain" />
                     </Link>
 
                     <div className="flex items-center gap-3">
                         <Link to="/cart">
                             <button className="rounded-[12px] p-[12px] bg-[color:var(--color-black10)]">
-                                <img src={basket} alt="basket" className="w-[28px] h-[28px]" />
+                                <img src={"/assets/imgs/NavBar/Union.png"} alt="basket" className="w-[28px] h-[28px]" />
                             </button>
                         </Link>
 
@@ -96,7 +92,7 @@ export default function Navbar() {
                             className="rounded-[10px] bg-[color:var(--color-brown60)] p-[12px]"
                         >
                             <img
-                                src={menuOpen ? CloseIcon : ToggleIcon}
+                                src={menuOpen ? "/assets/imgs/NavBar/close.svg" : "/assets/imgs/NavBar/Icon.png"}
                                 alt="toggle"
                                 className="w-[20px] h-[20px]"
                             />

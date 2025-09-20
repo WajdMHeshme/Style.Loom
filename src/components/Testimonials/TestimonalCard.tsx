@@ -1,5 +1,4 @@
 
-import Design from "./../../assets/imgs/Testimonials/Design.png";
 interface TestimonialCardProps {
   person: string;
   personName: string;
@@ -100,7 +99,7 @@ export default function TestimonialCard({
 
       {/* design image positioned depending on the border variant */}
       <img
-        src={Design}
+        src={"/assets/imgs/Testimonials/Design.png"}
         alt="Design element"
         className={`designe ${appliedDesignClass} pointer-events-none w-12 h-12 md:w-10 md:h-10 sm:w-8 sm:h-8`}
       />

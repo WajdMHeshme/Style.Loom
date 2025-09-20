@@ -1,5 +1,4 @@
 import TitleComponent from "../TitleComponent/TitleComponent";
-import star from "./../../assets/imgs/Vector.png";
 import { stepsData } from "./../../Data/stepsData";
 
 function StepsComponent() {
@@ -11,7 +10,7 @@ function StepsComponent() {
                     <TitleComponent
                         title="Navigating the StyleLoom Fashion Journey."
                         desc="At StyleLoom, we've designed a straightforward shopping experience to make fashion accessible."
-                        img={star}
+                        img={"/assets/imgs/Vector.png"}
                         fullImage={true}
                         imgMobile={true}
                     />
@@ -26,7 +25,7 @@ function StepsComponent() {
                     {stepsData.map((data, index) => (
                         <div
                             key={index}
-                            className="flex flex-col items-start justify-center px-6 py-8 border-b border-r border-dashed border-[#262626] 
+                            className="flex flex-col items-start justify-center px-6 py-8 border-b border-r border-dashed border-black15 
                 last:border-r-0 lg:border-b-0
                 sm:even:border-r-0 sm:last:border-b-0
                 max-sm:w-full"

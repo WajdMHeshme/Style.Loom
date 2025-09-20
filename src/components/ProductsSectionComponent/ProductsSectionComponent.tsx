@@ -1,7 +1,6 @@
 import  { useState } from "react";
 import ProductComponent from "./ProductComponent";
 import TitleComponent from "../TitleComponent/TitleComponent";
-import titleImg from "../../assets/imgs/AbstractDesign.png";
 import { productsData } from "../../Data/productsData";
 
 export default function ProductsSectionComponent() {
@@ -34,7 +33,7 @@ export default function ProductsSectionComponent() {
                             title="Elevate Your Style with Our Latest Collection"
                             desc="Each piece is crafted to enhance your fashion statement."
                             fullImage={false}
-                            img={titleImg}
+                            img={"/assets/imgs/AbstractDesign.png"}
                             imgMobile={true}
                         />
                     </div>
