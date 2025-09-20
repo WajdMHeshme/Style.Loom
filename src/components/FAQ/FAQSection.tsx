@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { exportedFAQCardData } from "../../Data/FAQComponentData";
-import AfBackImg from "../../assets/imgs/Vector.png";
 
 // Types
 interface Btn {
@@ -62,7 +61,7 @@ export default function FAQComponent() {
         >
           {/* الصورة كعنصر مستقل: تظهر فقط من md وفوق */}
           <img
-            src={AfBackImg}
+            src={"/assets/imgs/Vector.png"}
             alt=""
             aria-hidden="true"
             className="hidden md:block pointer-events-none absolute top-0 right-0
