@@ -16,23 +16,25 @@ const TestimonialSection: React.FC = () => {
   return (
     <section className="w-full 2xl:px-[162px] md:px-[80px] px-[16px] pt-[200px]">
       {/* Title wrapper with dashed border and rounded top corners */}
-      <div
-        className="rounded-t-[20px] overflow-x-hidden border-2 border-dashed border-black15"
-      >
+      <div className="rounded-t-[20px] overflow-hidden border-2 border-dashed border-black15 relative">
+        {/* الصورة: مخفية تحت md */}
+        <img
+          src={deecor}
+          alt=""
+          aria-hidden="true"
+          className="hidden md:block pointer-events-none absolute top-0 right-0 translate-x-[10%] -translate-y-[5%] max-w-[18rem] md:max-w-[22rem]"
+        />
+
         <div>
           <TitleComponent
             desc={"At StyleLoom, our customers are the heartbeat of our brand."}
             title={"The StyleLoom Testimonial Collection."}
-            fullImage={true}
-            img={deecor}
           />
         </div>
       </div>
 
       {/* Cards wrapper with dashed border, no top border, rounded bottom corners */}
-      <div
-        className="flex flex-wrap border-t-0 rounded-b-[20px] overflow-hidden border-2 border-dashed border-black15"
-      >
+      <div className="flex flex-wrap border-t-0 rounded-b-[20px] overflow-hidden border-2 border-dashed border-black15">
         {/* visible testimonials (always shown) */}
         <div className="w-full md:w-1/2 xl:w-1/3">
           <TestimonialCard
@@ -71,9 +73,7 @@ const TestimonialSection: React.FC = () => {
         </div>
 
         {/* invisible-on-mobile testimonials (hidden on small, shown on md+; on small they appear when isExpanded true) */}
-        <div
-          className={`${isExpanded ? "block" : "hidden"} md:block w-full md:w-1/2 xl:w-1/3`}
-        >
+        <div className={`${isExpanded ? "block" : "hidden"} md:block w-full md:w-1/2 xl:w-1/3`}>
           <TestimonialCard
             description={
               "Impressed by the quality and style. These shoes turned heads at every event. StyleLoom, you've gained a loyal customer!"
@@ -85,9 +85,7 @@ const TestimonialSection: React.FC = () => {
           />
         </div>
 
-        <div
-          className={`${isExpanded ? "block" : "hidden"} md:block w-full md:w-1/2 xl:w-1/3`}
-        >
+        <div className={`${isExpanded ? "block" : "hidden"} md:block w-full md:w-1/2 xl:w-1/3`}>
           <TestimonialCard
             description={
               "Perfect fit and exceptional quality. These jeans have become my go-to for casual and chic outings."
@@ -99,9 +97,7 @@ const TestimonialSection: React.FC = () => {
           />
         </div>
 
-        <div
-          className={`${isExpanded ? "block" : "hidden"} md:block w-full md:w-1/2 xl:w-1/3`}
-        >
+        <div className={`${isExpanded ? "block" : "hidden"} md:block w-full md:w-1/2 xl:w-1/3`}>
           <TestimonialCard
             description={
               "Stylish sneakers that don't compromise on comfort. StyleLoom knows how to balance fashion and functionality."
@@ -121,7 +117,7 @@ const TestimonialSection: React.FC = () => {
               className="block md:hidden w-full py-6 text-base text-[var(--gray70-color)] bg-transparent border-t border-dashed"
               style={{ borderColor: "var(--black20-color)" }}
             >
-              <div className="flex items-center justify-center gap-3">
+              <div className="flex items-center justify-center gap-3 text-gray70">
                 <span>View All</span>
                 <img src={arrow} alt="arrow" className="w-5 h-5 ml-3" />
               </div>
@@ -129,12 +125,9 @@ const TestimonialSection: React.FC = () => {
           ) : (
             <button
               onClick={() => setIsExpanded(false)}
-              className="block md:hidden w-full py-6 text-base text-[var(--gray70-color)] bg-transparent border-t border-dashed"
-              style={{ borderColor: "var(--black20-color)" }}
+              className="block md:hidden w-full py-6 text-base text-gray70 bg-transparent border-t border-dashed border-black20"
             >
-              <div className="flex items-center justify-center">
-                View Less
-              </div>
+              <div className="flex items-center justify-center">View Less</div>
             </button>
           )}
         </div>

@@ -3,6 +3,8 @@ import TrendsSectionComponent from '../components/TrendsSectionComponent/TrendsS
 import StepsComponent from '../components/StepsComponent/StepsComponent'
 import ProductsSectionComponent from '../components/ProductsSectionComponent/ProductsSectionComponent'
 import TestimonialSection from '../components/Testimonials/TestimonialsSection'
+import FAQSection from '../components/FAQ/FAQSection'
+import InfoSection from '../components/InfoSection';
 
 export default function Home() {
     return (
@@ -12,6 +14,8 @@ export default function Home() {
             <StepsComponent />
             <ProductsSectionComponent />
             <TestimonialSection />
+            <FAQSection />
+            <InfoSection />
         </>
     )
 }

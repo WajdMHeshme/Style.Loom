@@ -20,7 +20,7 @@ export default function TrendsCardComponent({ data, index }: TrendsCardProps) {
 
     return (
         <div
-            className={`relative flex flex-col border-t-2 border-dashed border-black15 ${borderRightClass} p-[60px] sm:p-[50px] md:p-7
+            className={`relative flex flex-col border-t-2 border-dashed border-black15 lg:border-r-2  ${borderRightClass} p-[60px] sm:p-[50px] md:p-7
         flex-1 basis-[33.33%] sm:basis-1/2 md:basis-full
       `}
         >
