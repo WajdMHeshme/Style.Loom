@@ -75,7 +75,7 @@ export default function Navbar() {
                 {/* ---------- Mobile Topbar (<= md) ---------- */}
                 <div className="flex xl:hidden justify-between items-center w-full py-5">
                     <Link to="/" onClick={() => setActiveLink("/")}>
-                        <img src={"/assets/imgs/logo.png"} alt="logo" className="w-[120px] object-contain" />
+                        <img src={"/assets/imgs/Logo.png"} alt="logo" className="w-[120px] object-contain" />
                     </Link>
 
                     <div className="flex items-center gap-3">
