@@ -71,8 +71,7 @@ export default function ProductsPageComponent() {
         {/* View All Section */}
         <div className="flex justify-between items-center p-[24px] sm:p-[30px]">
           <h3
-            className="
-              font-[var(--main-font)] font-medium uppercase
+            className="uppercase
               text-[1.5rem] leading-[28.13px]
               sm:text-[1.625rem] sm:leading-[30.47px]
               lg:text-[1.875rem] lg:leading-[35.16px]

@@ -61,3 +61,60 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #AE9B84 #1A1A1A; 
 }
+
+/* ---------------------------
+   Custom cursors (from public)
+   assumed files: /cursor.png  and /click.png
+   hotspot = center (16 16) for 32x32 images — غيّر الإحداثيات إذا أبعادك مختلفة
+   ---------------------------*/
+
+/* المؤشر الافتراضي للصفحة */
+body {
+  cursor: url("/cursor.png") 16 16, auto;
+}
+
+/* عند المرور على عناصر قابلة للنقر (روابط، أزرار، عناصر مخصصة) */
+a:hover,
+button:hover,
+.btn,
+.button {
+  cursor: url("/click.png") 16 16, pointer;
+}
+
+/* مثال: عند المرور على صورة المنتج نستخدم نفس أيقونة click مع zoom-in كـ fallback */
+.product-image:hover,
+.product-card:hover {
+  cursor: url("/click.png") 16 16, zoom-in;
+}
+
+/* مثال: لو تبي عنصر معين ما يتأثر بالمؤشر المخصص (fallback to default) */
+.no-custom-cursor {
+  cursor: auto !important;
+}
+/* apply click.png for common pointer elements */
+a,
+button,
+input[type="button"],
+input[type="submit"],
+label[for],
+[role="button"],
+[onclick],
+select,
+.option,
+.btn,
+.button,
+.icon-btn,
+.product-card,
+.product-image,
+.add-to-cart,
+.cart-button {
+  cursor: url("/click.png") 16 16, pointer;
+}
+
+/* لو تبي فقط عند hover (نادر الحاجة لأن cursor يشتغل على العنصر بشكل افتراضي) */
+a:hover,
+button:hover,
+.btn:hover,
+.product-card:hover {
+  cursor: url("/click.png") 16 16, pointer;
+}
