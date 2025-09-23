@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-
+import ScrollToTop from "./utils/ScrollToTop";
 import Navbar from "./components/Navbar/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -9,7 +9,7 @@ import Home from "./pages/Home";
 import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 
-import Loader from "./components/Loader";
+import Loader from "./utils/Loader";
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -45,8 +45,8 @@ const App: React.FC = () => {
           loading ? "pointer-events-none select-none blur-sm" : ""
         }`}
       >
+        <ScrollToTop />
         <Navbar />
-
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
