@@ -9,9 +9,10 @@ interface TrendsCardProps {
     };
     index: number;
     total: number;
+    className ?: string;
 }
 
-export default function TrendsCardComponent({ data, index }: TrendsCardProps) {
+export default function TrendsCardComponent({ data, index, className}: TrendsCardProps ) {
     // Determine border-right removal based on index (like nth-child in CSS)
     let borderRightClass = "border-r-2 border-dashed border-black15";
     if ((index + 1) % 3 === 0 && window.innerWidth >= 1200) borderRightClass = "border-r-0";
@@ -29,7 +30,7 @@ export default function TrendsCardComponent({ data, index }: TrendsCardProps) {
                 alt="bg"
                 className="absolute top-0 right-0 w-[186px] h-[186px] sm:w-[150px] sm:h-[150px] md:w-[100px] md:h-[100px]"
             />
-            <picture>
+            <picture className = {`${className}`}>
                 <source media="(max-width:1919px)" srcSet={data.iconSm} />
                 <img src={data.icon} alt="icon" className="pb-[50px] sm:pb-[40px] md:pb-[40px]" />
             </picture>
