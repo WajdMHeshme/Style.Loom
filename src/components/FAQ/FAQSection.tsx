@@ -71,7 +71,7 @@ export default function FAQComponent() {
           <h2 className="text-[28px] md:text-4xl xl:text-5xl text-white uppercase mb-8">
             Have Questions? We Have Answers.
           </h2>
-          <p className="text-lg text-gray-400 mb-12">
+          <p className="text-lg text-gray40 mb-12">
             Ease into the world of StyleLoom with clarity. Our FAQs cover a
             spectrum of topics.
           </p>
@@ -84,7 +84,7 @@ export default function FAQComponent() {
                 className={`px-6 py-4 h-16 rounded-lg text-base font-medium border border-transparent ${
                   activeBtn === btn.filter
                     ? "bg-brown70 text-black px-8"
-                    : "bg-transparent text-gray-400"
+                    : "bg-transparent textgray40"
                 }`}
                 onClick={() => activeTab(btn.filter)}
               >
@@ -110,7 +110,7 @@ export default function FAQComponent() {
                       <h3 className="text-2xl md:text-3xl text-white mb-4">
                         {b.title}
                       </h3>
-                      <p className="text-base text-gray-300">{b.desc}</p>
+                      <p className="text-base text-gray40">{b.desc}</p>
                     </div>
                   );
                 } else {
@@ -127,7 +127,7 @@ export default function FAQComponent() {
                       <h3 className="text-2xl md:text-3xl text-white mb-4">
                         {b.title}
                       </h3>
-                      <p className="text-base text-gray-300">{b.desc}</p>
+                      <p className="text-base text-gray40">{b.desc}</p>
                     </div>
                   );
                 }
@@ -139,7 +139,7 @@ export default function FAQComponent() {
 
         {/* View all (visible on smaller screens only) */}
         <button
-          className="block md:hidden w-full bg-transparent text-gray-400 border-0 outline-0 py-8 border-l-2 border-r-2 border-b-2 border-dashed border-black15 rounded-b-lg"
+          className="block md:hidden w-full bg-transparent text-gray40 border-0 outline-0 py-8 border-l-2 border-r-2 border-b-2 border-dashed border-black15 rounded-b-lg"
           onClick={toggleAll}
         >
           {isHide ? "View All" : "Hide"}

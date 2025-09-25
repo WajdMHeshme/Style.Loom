@@ -14,6 +14,33 @@ export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const toggleMenu = () => setMenuOpen((s) => !s);
 
+    // sticky state
+    const [isSticky, setIsSticky] = useState(false);
+
+    useEffect(() => {
+        let lastKnownScrollY = 0;
+        let ticking = false;
+        const THRESHOLD = 40;
+
+        function onScroll() {
+            lastKnownScrollY = window.scrollY;
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    setIsSticky(lastKnownScrollY > THRESHOLD);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        setIsSticky(window.scrollY > THRESHOLD);
+
+        return () => {
+            window.removeEventListener("scroll", onScroll);
+        };
+    }, []);
+
     // helper for desktop button classes (desktop vs mobile widths)
     const desktopBtn = (isActive: boolean) =>
         `rounded-[12px] text-[18px] cursor-pointer ${isActive
@@ -21,13 +48,23 @@ export default function Navbar() {
             : `bg-transparent text-[color:var(--color-gray70)] border-[1.5px] border-dashed border-[color:var(--color-black15)]`
         } py-[18px] px-[30px] md:w-auto w-[270px]`;
 
+    // animated position classes for spacing effect (tweak values here)
+    const leftGroupClass = `flex gap-[14px] transition-transform duration-300 ease-in-out ${isSticky ? "-translate-x-6" : "translate-x-0"}`;
+    const rightGroupClass = `flex gap-[14px] items-center transition-transform duration-300 ease-in-out ${isSticky ? "translate-x-6" : "translate-x-0"}`;
+    const logoClass = `transition-transform duration-300 ease-in-out ${isSticky ? "scale-95 -translate-y-1" : "scale-100 translate-y-0"}`;
+
     return (
-        <nav className="bg-[color:var(--color-black06)] fixed w-full z-[10000]">
+        <nav
+            className={`bg-[color:var(--color-black06)] fixed w-full z-[10000]
+                        transition-all duration-300 ease-in-out
+                        ${isSticky ? "translate-y-0 shadow-lg" : "-translate-y-0"}`}
+            aria-hidden={false}
+        >
             <div className="px-6 md:px-[162px] relative z-[99999]">
                 {/* ---------- Desktop / Tablet Navbar (>= md) ---------- */}
                 <div className="hidden xl:flex justify-between items-center border-b-[1.9px] border-b-dashed border-[color:var(--color-black15)] py-[29px]">
-                    {/* left buttons */}
-                    <div className="flex gap-[14px]">
+                    {/* left buttons (animated) */}
+                    <div className={leftGroupClass}>
                         <Link to="/" onClick={() => setActiveLink("/")}>
                             <button className={desktopBtn(activeLink === "/")}>Home</button>
                         </Link>
@@ -39,32 +76,32 @@ export default function Navbar() {
                         </Link>
                     </div>
 
-                    {/* logo (desktop) */}
+                    {/* logo (animated slightly) */}
                     <Link to="/" onClick={() => setActiveLink("/")}>
                         <img
                             src={"/assets/imgs/Logo.png"}
                             alt="logo"
-                            className="w-[151px] h-[28px] object-contain"
+                            className={`w-[151px] h-[28px] object-contain ${logoClass}`}
                         />
                     </Link>
 
-                    {/* right buttons */}
-                    <div className="flex gap-[14px] items-center">
+                    {/* right buttons (animated) */}
+                    <div className={rightGroupClass}>
                         <Link to="/cart">
-                            <button className="rounded-[12px] p-[18px] bg-[color:var(--color-black10)] border-0 cursor-pointer">
+                            <button className="rounded-[12px] p-[18px] bg-[color:var(--color-black10)] border-0 cursor-pointer transition-transform duration-300 ease-in-out">
                                 <img src={"/assets/imgs/NavBar/Union.png"} alt="basket" className="w-[24px] h-[24px]" />
                             </button>
                         </Link>
 
                         <Link to="/login" onClick={() => setActiveLink("/login")}>
-                            <button className="rounded-[12px] p-[18px] bg-[color:var(--color-black10)] border-0 flex items-center gap-2 text-[color:var(--color-gray70)] cursor-pointer">
+                            <button className="rounded-[12px] p-[18px] bg-[color:var(--color-black10)] border-0 flex items-center gap-2 text-[color:var(--color-gray70)] cursor-pointer transition-transform duration-300 ease-in-out">
                                 <FiUserPlus className="w-[24px] h-[24px]" />
                             </button>
                         </Link>
 
                         <Link to="/contact" onClick={() => setActiveLink("/contact")}>
                             <button
-                                className={`rounded-[12px] text-[18px] font-medium cursor-pointer bg-[color:var(--color-brown60)] py-[18px] px-[30px] md:w-auto w-[270px]`}
+                                className={`rounded-[12px] text-[18px] font-medium cursor-pointer bg-[color:var(--color-brown60)] py-[18px] px-[30px] md:w-auto w-[270px] transition-transform duration-300 ease-in-out`}
                             >
                                 Contact
                             </button>
@@ -102,8 +139,7 @@ export default function Navbar() {
 
                 {/* ---------- Mobile overlay menu (slides from top) ---------- */}
                 <div
-                    className={`xl:hidden fixed left-[5%]  w-[90%]  transform transition-transform duration-700 ${menuOpen ? "translate-y-0 top-[92px] z-[9955]" : "-translate-y-full top-0 z-[-10]"
-                        } bg-black/80 backdrop-blur-md rounded-b-[40px] flex flex-col items-center gap-[18px]  pt-[40px]`}
+                    className={`xl:hidden fixed left-[5%]  w-[90%]  transform transition-transform duration-700 ${menuOpen ? "translate-y-0 top-[92px] z-[9955]" : "-translate-y-full top-0 z-[-10]"} bg-black/80 backdrop-blur-md rounded-b-[40px] flex flex-col items-center gap-[18px]  pt-[40px]`}
                 >
                     {/* mobile buttons stack */}
                     <div className="flex flex-col items-center gap-[18px]">
@@ -135,8 +171,6 @@ export default function Navbar() {
                             </button>
                         </Link>
                     </div>
-
-
                 </div>
             </div>
         </nav>

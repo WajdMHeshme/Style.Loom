@@ -109,7 +109,7 @@ const TestimonialSection: React.FC = () => {
               className="block md:hidden w-full py-6 text-base text-[var(--gray70-color)] bg-transparent border-t border-dashed"
               style={{ borderColor: "var(--black20-color)" }}
             >
-              <div className="flex items-center justify-center gap-3 text-gray70">
+              <div className="flex items-center justify-center gap-3 text-gray50">
                 <span>View All</span>
                 <img src={"/assets/imgs/Icons/arrow.png"} alt="arrow" className="w-5 h-5 ml-3" />
               </div>

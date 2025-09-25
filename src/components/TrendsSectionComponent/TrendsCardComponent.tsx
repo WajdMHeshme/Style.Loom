@@ -37,7 +37,7 @@ export default function TrendsCardComponent({ data, index, className}: TrendsCar
             <h4 className="text-white text-[24px] sm:text-[22px] pb-4 sm:pb-3 m-0 font-sans">
                 {data.title}
             </h4>
-            <p className="text-gray50 text-[18px] sm:text-[16px] m-0 leading-6 font-sans">
+            <p className="text-gray40 text-[18px] sm:text-[16px] m-0 leading-6 font-sans">
                 {data.desc}
             </p>
         </div>

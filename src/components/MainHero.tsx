@@ -59,7 +59,7 @@ export default function HeroComponent() {
     md:w-[128px] lg:w-[159px] lg:h-[63px] md:h-[48px]
     h-8
     rounded-[12px]
-    border border-dashed border-[#404040]
+    border border-dashed border-black15
     lg:px-[24px] p-3 lg:py-[18px]
     bg-[#1F1F1F] text-white
     transition

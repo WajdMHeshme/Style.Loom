@@ -54,7 +54,7 @@ export default function TestimonialCard({
             <span className="text-xl font-medium text-white leading-7 md:text-lg sm:text-base">
               {personName}
             </span>
-            <span className="text-lg font-normal text-gray-400 leading-6 md:text-base sm:text-sm">
+            <span className="text-lg font-normal text-gray40 leading-6 md:text-base sm:text-sm">
               {personCity}
             </span>
           </div>
@@ -94,7 +94,7 @@ export default function TestimonialCard({
           </svg>
         </div>
 
-        <p className="text-base text-gray-300 leading-7 md:text-sm sm:text-sm">{description}</p>
+        <p className="text-base text-gray50 leading-7 md:text-sm sm:text-sm">{description}</p>
       </div>
 
       {/* design image positioned depending on the border variant */}
