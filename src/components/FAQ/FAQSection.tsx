@@ -77,14 +77,14 @@ export default function FAQComponent() {
           </p>
 
           {/* buttons */}
-          <div className="flex gap-3 overflow-x-auto whitespace-nowrap">
+          <div className="flex gap-3 overflow-x-auto whitespace-nowrap ">
             {btns.map((btn, index) => (
               <button
                 key={index}
                 className={`px-6 py-4 h-16 rounded-lg text-base font-medium border border-transparent ${
                   activeBtn === btn.filter
                     ? "bg-brown70 text-black px-8"
-                    : "bg-transparent textgray40"
+                    : "bg-transparent text-gray40"
                 }`}
                 onClick={() => activeTab(btn.filter)}
               >
