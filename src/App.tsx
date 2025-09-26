@@ -10,18 +10,20 @@ import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import Loader from "./utils/Loader";
+import MainLoader from "./utils/mainLoader/MainLoader"; // اللودر الأساسي
 
 const App: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [firstLoading, setFirstLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const firstLoad = useRef<boolean>(true);
   const location = useLocation();
 
-  // Loader عند أول تحميل الصفحة
+  // MainLoader عند أول تحميل الصفحة
   useEffect(() => {
     const t = setTimeout(() => {
-      setLoading(false);
+      setFirstLoading(false);
       firstLoad.current = false;
-    }, 1600);
+    }, 4000);
     return () => clearTimeout(t);
   }, []);
 
@@ -32,30 +34,30 @@ const App: React.FC = () => {
     setLoading(true);
     const t = setTimeout(() => {
       setLoading(false);
-
-      // ScrollToTop بعد انتهاء اللودر
       window.scrollTo({
         top: 0,
         behavior: "smooth",
       });
-    }, 300);
+    }, 400);
 
     return () => clearTimeout(t);
   }, [location]);
 
   return (
     <div className="bg-black06 min-h-screen relative">
-      {/* Loader */}
-      {loading && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
-          <Loader size="w-20 h-20" center={true} />
+      {/* MainLoader أول مرة */}
+      {firstLoading && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center">
+          <MainLoader />
         </div>
       )}
+
       <ScrollToTop />
+
       {/* المحتوى */}
       <div
         className={`${
-          loading ? "pointer-events-none select-none blur-sm" : ""
+          firstLoading || loading ? "pointer-events-none select-none blur-sm" : ""
         }`}
       >
         <Navbar />
@@ -69,6 +71,13 @@ const App: React.FC = () => {
         </Routes>
         <Footer />
       </div>
+
+      {/* Loader عند التنقل بين الراوتات */}
+      {!firstLoading && loading && (
+        <div className="fixed inset-0 z-40 bg-black/40 flex items-center justify-center">
+          <Loader size="w-12 h-12" center={true} />
+        </div>
+      )}
     </div>
   );
 };
