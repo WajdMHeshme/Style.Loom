@@ -81,7 +81,6 @@ const Favourite: React.FC = () => {
               <div className="relative bg-white/3 p-4 rounded-2xl shadow-sm hover:shadow-lg transition h-full">
                 {/* If you still want a remove button here, you can re-add it with e.stopPropagation() */}
                 {/* ProductComponent wrapped with Link so clicking the card navigates to product detail */}
-                <Link to={`/products/${p.id}`} className="block">
                   <div className="flex flex-col h-full">
                     <div className="mb-4">
                       <ProductComponent
@@ -106,8 +105,6 @@ const Favourite: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                </Link>
-                {/* End Link */}
               </div>
             </div>
           ))}
