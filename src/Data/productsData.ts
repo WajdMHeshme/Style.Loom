@@ -1,6 +1,6 @@
 // src/Data/productsData.ts
-// 🔹 نوع المنتج
 export type Product = {
+  id: number;   
   img: string;
   category: string;
   title: string;
@@ -18,6 +18,7 @@ type ProductsData = {
 export const productsData: ProductsData = {
   womenProductsData: [
     {
+      id: 1,
       img: "/assets/imgs/Products/Image-7.webp",
       category: "Womenswear",
       title: "Timeless A-line Evening Dress",
@@ -25,6 +26,7 @@ export const productsData: ProductsData = {
       price: 109.99,
     },
     {
+      id: 2,
       img: "/assets/imgs/Products/Image-8.webp",
       category: "Womenswear",
       title: "Floral Bloom Maxi Dress",
@@ -32,6 +34,7 @@ export const productsData: ProductsData = {
       price: 54.99,
     },
     {
+      id: 3,
       img: "/assets/imgs/Products/Image-9.webp",
       category: "Womenswear",
       title: "Elegant Evening Gown",
@@ -39,6 +42,7 @@ export const productsData: ProductsData = {
       price: 89.99,
     },
     {
+      id: 4,
       img: "/assets/imgs/Products/Image-10.webp",
       category: "Accessories",
       title: "Urban Chic Handbag",
@@ -46,6 +50,7 @@ export const productsData: ProductsData = {
       price: 49.99,
     },
     {
+      id: 5,
       img: "/assets/imgs/Products/Image-11.webp",
       category: "Accessories",
       title: "Sophisticate Sun Hat",
@@ -53,6 +58,7 @@ export const productsData: ProductsData = {
       price: 24.99,
     },
     {
+      id: 6,
       img: "/assets/imgs/Products/Image-12.webp",
       category: "Accessories",
       title: "Boho Chic Printed Scarf",
@@ -63,6 +69,7 @@ export const productsData: ProductsData = {
 
   menProductsData: [
     {
+      id: 7,
       img: "/assets/imgs/Products/men1.jpg",
       category: "Menswear",
       title: "Evening T-shirt",
@@ -70,6 +77,7 @@ export const productsData: ProductsData = {
       price: 110.99,
     },
     {
+      id: 8,
       img: "/assets/imgs/Products/men2.jpg",
       category: "Menswear",
       title: "Casual Button-up Shirt",
@@ -77,6 +85,7 @@ export const productsData: ProductsData = {
       price: 77.99,
     },
     {
+      id: 9,
       img: "/assets/imgs/Products/men3.jpg",
       category: "Menswear",
       title: "Boho Chic Printed Sweater",
@@ -87,6 +96,7 @@ export const productsData: ProductsData = {
 
   kidsProductsData: [
     {
+      id: 10,
       img: "/assets/imgs/Products/kids1.jpg",
       category: "Kidswear",
       title: "Boho Chic Printed Scarf",
@@ -94,7 +104,7 @@ export const productsData: ProductsData = {
       price: 19.99,
     },
     {
-
+      id: 11,
       img: "/assets/imgs/Products/kids2.jpg",
       category: "Kidswear",
       title: "Timeless A-line Evening Dress",
@@ -102,6 +112,7 @@ export const productsData: ProductsData = {
       price: 54.99,
     },
     {
+      id: 12,
       img: "/assets/imgs/Products/kids3.jpg",
       category: "Kidswear",
       title: "Floral Bloom Maxi Dress",

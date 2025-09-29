@@ -7,10 +7,12 @@ import Register from "./pages/Register";
 import Footer from "./components/Footer/Footer";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
+import Favourite from "./pages/Favourite";
 import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import Loader from "./utils/Loader";
 import MainLoader from "./utils/mainLoader/MainLoader"; // اللودر الأساسي
+import ProductDetail from "./pages/ProductsDetail";
 
 const App: React.FC = () => {
   const [firstLoading, setFirstLoading] = useState<boolean>(true);
@@ -65,6 +67,8 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/favorites" element={<Favourite />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/contact" element={<Contact />} />
