@@ -1,5 +1,6 @@
+// src/App.tsx
 import React, { useEffect, useState, useRef } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import ScrollToTop from "./utils/ScrollToTop";
 import Navbar from "./components/Navbar/Navbar";
 import Login from "./pages/Login";
@@ -11,8 +12,10 @@ import Favourite from "./pages/Favourite";
 import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import Loader from "./utils/Loader";
-import MainLoader from "./utils/mainLoader/MainLoader"; // اللودر الأساسي
+import MainLoader from "./utils/mainLoader/MainLoader";
 import ProductDetail from "./pages/ProductsDetail";
+import ProfilePage from "./pages/ProfilePage";
+import PrivateRoute from "./utils/PrivateRoute";
 
 const App: React.FC = () => {
   const [firstLoading, setFirstLoading] = useState<boolean>(true);
@@ -36,10 +39,7 @@ const App: React.FC = () => {
     setLoading(true);
     const t = setTimeout(() => {
       setLoading(false);
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }, 400);
 
     return () => clearTimeout(t);
@@ -57,21 +57,73 @@ const App: React.FC = () => {
       <ScrollToTop />
 
       {/* المحتوى */}
-      <div
-        className={`${
-          firstLoading || loading ? "pointer-events-none select-none blur-sm" : ""
-        }`}
-      >
+      <div className={`${firstLoading || loading ? "pointer-events-none select-none blur-sm" : ""}`}>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:id" element={<ProductDetail />} />
-          <Route path="/favorites" element={<Favourite />} />
+          {/* افتراضي: توجه مباشرة لصفحة تسجيل الدخول */}
+          <Route path="/" element={<Navigate to="/register" replace />} />
+
+          {/* صفحات محمية */}
+          <Route
+            path="/home"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <PrivateRoute>
+                <Cart />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/products"
+            element={
+              <PrivateRoute>
+                <Products />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/products/:id"
+            element={
+              <PrivateRoute>
+                <ProductDetail />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/favorites"
+            element={
+              <PrivateRoute>
+                <Favourite />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <PrivateRoute>
+                <Contact />
+              </PrivateRoute>
+            }
+          />
+
+          {/* صفحات غير محمية */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/contact" element={<Contact />} />
         </Routes>
         <Footer />
       </div>
@@ -87,3 +139,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

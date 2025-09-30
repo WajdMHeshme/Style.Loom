@@ -1,39 +1,97 @@
+// src/pages/RegisterPage.tsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
+/** فكّ payload من JWT */
+function decodeJwtPayload(token: string) {
+  try {
+    const payload = token.split(".")[1];
+    const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const json = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
 export default function RegisterPage() {
-  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const API_BASE = (import.meta as any).env?.VITE_API_BASE || "http://localhost:3000";
+  const REGISTER_URL = `${API_BASE}/api/auth/register`;
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
-    if (!username) {
-      setError("Username is required");
-      return;
-    }
-    if (!email) {
-      setError("Email is required");
-      return;
-    }
-    if (!password) {
-      setError("Password is required");
-      return;
-    }
+    setError(null);
+
+    if (!firstName.trim()) return setError("First name is required");
+    if (!lastName.trim()) return setError("Last name is required");
+    if (!email.trim()) return setError("Email is required");
+    if (!password) return setError("Password is required");
 
     setLoading(true);
-    // simulate registration API call
-    setTimeout(() => {
+
+    try {
+      const res = await fetch(REGISTER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          first_name: firstName.trim(),
+          last_name: lastName.trim(),
+          email: email.trim(),
+          password,
+        }),
+      });
+
+      const resText = await res.text();
+      let body: any;
+      try {
+        body = resText ? JSON.parse(resText) : {};
+      } catch {
+        body = { message: resText };
+      }
+
+      if (!res.ok) {
+        const serverMsg = body?.message || body?.error || res.statusText || `Register failed (${res.status})`;
+        setError(serverMsg);
+        setLoading(false);
+        return;
+      }
+
+      // التوكن واسم المستخدم
+      const token = body?.token || body?.accessToken || body?.data?.token;
+      let userName = body?.user?.first_name || body?.user?.username || body?.first_name || body?.name;
+
+      if (!userName && token) {
+        const payload = decodeJwtPayload(token);
+        userName = payload?.first_name || payload?.name || payload?.username || null;
+      }
+
+      if (token) localStorage.setItem("token", token);
+      if (userName) localStorage.setItem("user_name", userName);
+
+      // مباشرة للـ Products بعد التسجيل
+      navigate("/products");
+    } catch (err: any) {
+      console.error("Register error:", err);
+      setError(err?.message || "Network error while registering");
+    } finally {
       setLoading(false);
-      navigate("/dashboard");
-    }, 800);
-  }
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black06 p-6">
@@ -43,47 +101,41 @@ export default function RegisterPage() {
             <div className="mx-auto w-16 h-16 flex items-center justify-center">
               <img src="/Clippathgroup.svg" alt="icon" />
             </div>
-            <h1 className="mt-4 text-2xl font-semibold text-white">
-              Create Account
-            </h1>
-            <p className="mt-1 text-sm text-brown60">
-              Welcome — create your new account
-            </p>
+            <h1 className="mt-4 text-2xl font-semibold text-white">Create Account</h1>
+            <p className="mt-1 text-sm text-brown60">Welcome — create your new account</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="text-sm text-red-400 bg-[#2b1510] p-2 rounded">
-                {error}
-              </div>
-            )}
+            {error && <div className="text-sm text-red-400 bg-[#2b1510] p-2 rounded">{error}</div>}
 
-            {/* Username */}
             <div>
-              <label
-                className="block text-sm mb-2 text-brown60"
-                htmlFor="username"
-              >
-                Username
-              </label>
+              <label className="block text-sm mb-2 text-brown60" htmlFor="firstName">First Name</label>
               <input
-                id="username"
+                id="firstName"
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white placeholder-[#7e7e7e] outline-none border border-[#1e1e1e] focus:border-brown60 focus:ring-2 focus:ring-brown60/20 transition"
-                placeholder="Enter your username"
+                placeholder="Enter your first name"
+                autoComplete="given-name"
               />
             </div>
 
-            {/* Email */}
             <div>
-              <label
-                className="block text-sm mb-2 text-brown60"
-                htmlFor="email"
-              >
-                Email
-              </label>
+              <label className="block text-sm mb-2 text-brown60" htmlFor="lastName">Last Name</label>
+              <input
+                id="lastName"
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white placeholder-[#7e7e7e] outline-none border border-[#1e1e1e] focus:border-brown60 focus:ring-2 focus:ring-brown60/20 transition"
+                placeholder="Enter your last name"
+                autoComplete="family-name"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm mb-2 text-brown60" htmlFor="email">Email</label>
               <input
                 id="email"
                 type="email"
@@ -95,14 +147,8 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Password */}
             <div>
-              <label
-                className="block text-sm mb-2 text-brown60"
-                htmlFor="password"
-              >
-                Password
-              </label>
+              <label className="block text-sm mb-2 text-brown60" htmlFor="password">Password</label>
               <div className="relative">
                 <input
                   id="password"
@@ -118,16 +164,11 @@ export default function RegisterPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#cfc6bb] hover:text-brown60"
                 >
-                  {showPassword ? (
-                    <FiEyeOff className="w-5 h-5" />
-                  ) : (
-                    <FiEye className="w-5 h-5" />
-                  )}
+                  {showPassword ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -140,29 +181,17 @@ export default function RegisterPage() {
               {loading ? "Creating account..." : "Register"}
             </button>
 
-            {/* Login link */}
             <div className="text-center mt-2 text-sm text-brown60">
               Already have an account?{" "}
-              <Link
-                to="/login"
-                className="font-medium text-brown60 hover:underline"
-              >
-                Sign in
-              </Link>
+              <Link to="/login" className="font-medium text-brown60 hover:underline">Sign in</Link>
             </div>
           </form>
         </div>
 
         <p className="mt-6 text-center text-xs text-[#7a7470]">
           By registering, you agree to our{" "}
-          <a href="/terms" className="text-brown60">
-            Terms
-          </a>{" "}
-          and{" "}
-          <a href="/privacy" className="text-brown60">
-            Privacy Policy
-          </a>
-          .
+          <a href="/terms" className="text-brown60">Terms</a> and{" "}
+          <a href="/privacy" className="text-brown60">Privacy Policy</a>.
         </p>
       </div>
     </div>
