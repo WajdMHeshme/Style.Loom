@@ -1,9 +1,7 @@
-// src/pages/Login.tsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
-/** فكّ payload من JWT (للحصول على اسم المستخدم لو السيرفر ما رجع user object) */
 function decodeJwtPayload(token: string | null) {
   if (!token) return null;
   try {
@@ -57,44 +55,31 @@ export default function LoginPage() {
 
       const text = await res.text();
       let body: any;
-      try {
-        body = text ? JSON.parse(text) : {};
-      } catch {
-        body = { message: text };
-      }
+      try { body = text ? JSON.parse(text) : {}; } catch { body = { message: text }; }
 
       if (!res.ok) {
-        const msg = body?.message || body?.error || res.statusText || `Login failed (${res.status})`;
-        setError(msg);
+        setError(body?.message || "Login failed");
         setLoading(false);
         return;
       }
 
-      // نتوقع body يحتوي token و/أو user
-      const token = body?.token || body?.accessToken || body?.data?.token || null;
-      let userName = body?.user?.first_name || body?.user?.username || body?.user?.name || body?.first_name || body?.name || null;
-
+      const token = body?.token || body?.accessToken || null;
+      let userName = body?.user?.first_name || body?.user?.name || null;
       if (!userName && token) {
         const payload = decodeJwtPayload(token);
-        userName = payload?.first_name || payload?.name || payload?.username || null;
+        userName = payload?.first_name || payload?.name || null;
       }
 
-      // خزّن التوكن واسم المستخدم
       if (token) {
-        if (remember) {
-          localStorage.setItem("token", token);
-        } else {
-          sessionStorage.setItem("token", token);
-        }
+        if (remember) localStorage.setItem("token", token);
+        else sessionStorage.setItem("token", token);
       }
-      if (userName) {
-        localStorage.setItem("user_name", userName);
-      }
+      if (userName) localStorage.setItem("user_name", userName);
 
-      // توجه مباشرة لصفحة المنتجات
+      // تخزين علامة البوب آب ثم التوجه
+      localStorage.setItem("showLoginPopup", "true");
       navigate("/products");
     } catch (err: any) {
-      console.error("Login error:", err);
       setError(err?.message || "Network error");
     } finally {
       setLoading(false);
@@ -106,7 +91,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md pt-27">
         <div className="bg-gradient-to-br from-black06/60 to-[#111111]/60 p-8 rounded-2xl shadow-2xl border border-[#222]">
           <div className="mb-6 text-center">
-            <div className="mx-auto w-16 h-16  flex items-center justify-center">
+            <div className="mx-auto w-16 h-16 flex items-center justify-center">
               <img src="/Clippathgroup.svg" alt="icon" />
             </div>
             <h1 className="mt-4 text-2xl font-semibold text-white">Sign In</h1>
@@ -116,7 +101,6 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && <div className="text-sm text-red-400 bg-[#2b1510] p-2 rounded">{error}</div>}
 
-            {/* Email */}
             <div>
               <label className="block text-sm mb-2 text-brown60" htmlFor="email">Email</label>
               <input
@@ -126,17 +110,14 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white placeholder-[#7e7e7e] outline-none border border-[#1e1e1e] focus:border-brown60 focus:ring-2 focus:ring-brown60/20 transition"
                 placeholder="example@domain.com"
-                autoComplete="email"
               />
             </div>
 
-            {/* Password */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-sm text-brown60" htmlFor="password">Password</label>
                 <a href="#" className="text-xs text-brown60 hover:text-white">Forgot password?</a>
               </div>
-
               <div className="relative">
                 <input
                   id="password"
@@ -145,7 +126,6 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white placeholder-[#7e7e7e] outline-none border border-[#1e1e1e] focus:border-[#ae9b84] focus:ring-2 focus:ring-brown60/20 transition pr-10"
                   placeholder="Enter your password"
-                  autoComplete="current-password"
                 />
                 <button
                   type="button"
@@ -157,7 +137,6 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Remember me */}
             <div className="flex items-center justify-between">
               <label className="inline-flex items-center text-sm text-brown60">
                 <input
@@ -170,7 +149,6 @@ export default function LoginPage() {
               </label>
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -183,7 +161,6 @@ export default function LoginPage() {
               {loading ? "Signing in..." : "Sign In"}
             </button>
 
-            {/* Register link */}
             <div className="text-center mt-2 text-sm text-[#cfc6bb]">
               Don’t have an account?{" "}
               <Link to="/register" className="font-medium text-brown60 hover:underline">Register now</Link>
@@ -200,3 +177,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
