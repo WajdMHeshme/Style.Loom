@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import UserAvatar from "../components/UserAvatar";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { useAppSelector } from "../redux/store/hooks";
+import LogoutPopup from "../utils/LogoutPopup"; // استدعاء البوب اب
 
 type UserData = {
   id?: number;
@@ -43,8 +44,8 @@ export default function ProfilePage(): JSX.Element {
 
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
-  // try get wishlist length from redux, fallback to localStorage
   let favoritesFromRedux: any[] = [];
   try {
     favoritesFromRedux = useAppSelector((s: any) => s.favorites || []);
@@ -80,7 +81,7 @@ export default function ProfilePage(): JSX.Element {
         const userObj: UserData = data?.user ? data.user : data;
         userObj.points = userObj.points ?? (userObj.orders ? (userObj.orders.length || 0) * 10 : 0);
         setUser(userObj);
-      } catch (err) {
+      } catch {
         const payload = decodeJwtPayload(token);
         if (payload) {
           setUser({
@@ -106,7 +107,8 @@ export default function ProfilePage(): JSX.Element {
     return () => controller.abort();
   }, [fetchProfile]);
 
-  const handleLogout = () => {
+  const handleLogout = () => setShowLogoutPopup(true);
+  const confirmLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user_name");
     navigate("/login");
@@ -148,16 +150,24 @@ export default function ProfilePage(): JSX.Element {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-b from-black06 to-black04">
+    <div className="min-h-screen p-6 bg-gradient-to-b from-black06 to-black04 relative">
+      {/* Logout popup */}
+      <LogoutPopup
+        isVisible={showLogoutPopup}
+        onConfirm={confirmLogout}
+        onCancel={() => setShowLogoutPopup(false)}
+      />
+
       <div className="max-w-4xl mx-auto mt-[140px]">
+        {/* Profile Image on Top */}
+        <div className="flex justify-center mb-6">
+          <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-brown70 shadow-lg">
+            <UserAvatar size={128} />
+          </div>
+        </div>
+
         <div className="bg-[color:var(--color-black05)] p-6 rounded-2xl border border-[color:var(--color-black15)] shadow-lg">
           <div className="flex flex-col md:flex-row gap-6 md:items-center">
-            <div className="flex-shrink-0">
-              <div className="w-[96px] h-[96px]">
-                <UserAvatar size={96} />
-              </div>
-            </div>
-
             <div className="flex-1">
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -187,7 +197,8 @@ export default function ProfilePage(): JSX.Element {
 
                 <div className="flex items-start gap-2">
                   <button
-                    onClick={handleLogout}
+                  
+                    onClick={handleLogout} // فتح البوب اب
                     className="px-4 py-2 rounded-lg bg-red-600 text-white hover:brightness-90 transition"
                   >
                     Logout
@@ -230,59 +241,6 @@ export default function ProfilePage(): JSX.Element {
 
             <div className="text-sm text-gray-400">
               Member since: <span className="text-white font-medium">{user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "—"}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-[color:var(--color-black05)] p-4 rounded-2xl border border-[color:var(--color-black15)]">
-            <h4 className="text-sm text-gray-300">Account overview</h4>
-            <div className="mt-3 space-y-2">
-              <div className="flex items-center justify-between">
-                <div className="text-xs text-gray-400">Total orders</div>
-                <div className="font-semibold text-white">{user?.orders?.length || 0}</div>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="text-xs text-gray-400">Wishlist</div>
-                <div className="font-semibold text-white">{wishlistCount}</div>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="text-xs text-gray-400">Rating</div>
-                <div className="font-semibold text-white">{user?.rating ?? 0}/5</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="md:col-span-2 bg-[color:var(--color-black05)] p-4 rounded-2xl border border-[color:var(--color-black15)]">
-            <div className="flex items-center justify-between">
-              <h4 className="text-sm text-gray-300">Recent orders</h4>
-              <a href="/orders" className="text-xs text-gray-400">View all</a>
-            </div>
-
-            <div className="mt-3 space-y-3">
-              {(user?.orders && user.orders.length > 0 ? user.orders.slice(0, 3) : []).map((o: any, idx: number) => (
-                <div key={o.id ?? idx} className="flex items-center justify-between p-3 bg-white/3 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-white/5 rounded overflow-hidden flex items-center justify-center text-xs text-gray-300">
-                      {o.items && o.items[0] && o.items[0].img ? (
-                        <img src={o.items[0].img} alt={o.items[0].title || "item"} className="w-full h-full object-cover" />
-                      ) : "IMG"}
-                    </div>
-                    <div>
-                      <div className="text-sm text-white font-medium">Order #{o.id ?? "—"}</div>
-                      <div className="text-xs text-gray-400">{o.date ? new Date(o.date).toLocaleDateString() : "—"}</div>
-                    </div>
-                  </div>
-
-                  <div className="text-sm text-gray-300">
-                    ${o.total?.toFixed ? o.total.toFixed(2) : (o.total ?? "—")}
-                  </div>
-                </div>
-              ))}
-
-              {(!user?.orders || user.orders.length === 0) && (
-                <div className="text-sm text-gray-400 py-4 text-center">No recent orders — start shopping!</div>
-              )}
             </div>
           </div>
         </div>
