@@ -56,7 +56,6 @@ export default function ProductsSectionComponent(): JSX.Element {
         });
 
         if (res.status === 401) {
-          // توكن ناقص أو غير صحيح
           setError("غير مصرح — الرجاء تسجيل الدخول للوصول إلى المنتجات.");
           setProducts([]);
           setLoading(false);
@@ -73,7 +72,7 @@ export default function ProductsSectionComponent(): JSX.Element {
             rawImg.startsWith("http") || rawImg.startsWith("data:")
               ? rawImg
               : rawImg
-              ? `${window.location.origin}${rawImg}`
+              ? `http://localhost:3000${rawImg}`
               : "/assets/imgs/default-product.jpg";
 
           const mainName = p.subCategory?.main?.name?.toLowerCase() ?? "";
@@ -158,9 +157,8 @@ export default function ProductsSectionComponent(): JSX.Element {
             <div className="w-full p-8 text-center">
               <div className="mb-4 text-red-600">{error}</div>
 
-              {/* إذا الخطأ Unauthorized نوفر زر للانتقال للّوجن */}
-              {error.toLowerCase().includes("تسجيل الدخول") ||
-              error.toLowerCase().includes("غير مصرح") ? (
+              {(error.toLowerCase().includes("تسجيل الدخول") ||
+                error.toLowerCase().includes("غير مصرح")) && (
                 <div className="flex justify-center gap-4">
                   <button
                     onClick={() => navigate("/login")}
@@ -169,16 +167,13 @@ export default function ProductsSectionComponent(): JSX.Element {
                     اذهب لتسجيل الدخول
                   </button>
                   <button
-                    onClick={() => {
-                      // محاولة إعادة التحميل بعد تغيير التوكن يدوياً
-                      window.location.reload();
-                    }}
+                    onClick={() => window.location.reload()}
                     className="px-4 py-2 rounded-lg border"
                   >
                     إعادة المحاولة
                   </button>
                 </div>
-              ) : null}
+              )}
             </div>
           )}
 
@@ -200,3 +195,4 @@ export default function ProductsSectionComponent(): JSX.Element {
     </div>
   );
 }
+
