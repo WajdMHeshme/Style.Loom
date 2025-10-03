@@ -80,7 +80,7 @@ const ProductComponent: React.FC<ProductComponentProps> = ({
           <img
             src={img}
             alt={title}
-            className="w-full h-full object-cover block"
+            className="w-full h-[326px] object-cover block"
           />
 
           {/* Favorite button (overlay top-right) */}

@@ -61,7 +61,7 @@ const ProductComponent: React.FC<ProductProps> = ({
     >
       {/* Product Image */}
       <div className="w-full h-[60.4%] overflow-hidden rounded-t-[50px] max-[1919px]:rounded-t-[30px] max-[540px]:rounded-t-[20px] relative">
-        <img src={img} alt={title} className="w-full object-cover" />
+        <img src={img} alt={title} className="w-full object-cover h-[326px]" />
 
         {/* Favorite button (overlay top-right) */}
         <div className="absolute top-3 right-3">

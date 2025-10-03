@@ -56,7 +56,7 @@ export default function ProductsSectionComponent(): JSX.Element {
         });
 
         if (res.status === 401) {
-          setError("غير مصرح — الرجاء تسجيل الدخول للوصول إلى المنتجات.");
+          setError("Unauthorized — Please log in to access products.");
           setProducts([]);
           setLoading(false);
           return;
@@ -94,7 +94,7 @@ export default function ProductsSectionComponent(): JSX.Element {
 
         setProducts(mapped);
       } catch (err: any) {
-        setError(err.message || "فشل جلب المنتجات");
+        setError(err.message || "Failed to fetch products");
       } finally {
         setLoading(false);
       }
@@ -150,27 +150,27 @@ export default function ProductsSectionComponent(): JSX.Element {
         {/* Products */}
         <div className="flex flex-wrap">
           {loading && (
-            <div className="w-full p-8 text-center">جارِ تحميل المنتجات...</div>
+            <div className="w-full p-8 text-center">Loading products...</div>
           )}
 
           {error && (
             <div className="w-full p-8 text-center">
               <div className="mb-4 text-red-600">{error}</div>
 
-              {(error.toLowerCase().includes("تسجيل الدخول") ||
-                error.toLowerCase().includes("غير مصرح")) && (
+              {(error.toLowerCase().includes("log in") ||
+                error.toLowerCase().includes("unauthorized")) && (
                 <div className="flex justify-center gap-4">
                   <button
                     onClick={() => navigate("/login")}
                     className="px-4 py-2 rounded-lg bg-brown70 text-black06"
                   >
-                    اذهب لتسجيل الدخول
+                    Go to Login
                   </button>
                   <button
                     onClick={() => window.location.reload()}
                     className="px-4 py-2 rounded-lg border"
                   >
-                    إعادة المحاولة
+                    Retry
                   </button>
                 </div>
               )}
@@ -195,4 +195,3 @@ export default function ProductsSectionComponent(): JSX.Element {
     </div>
   );
 }
-
