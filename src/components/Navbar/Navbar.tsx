@@ -101,6 +101,23 @@ export default function Navbar() {
 
           {/* right buttons */}
           <div className={rightGroupClass}>
+                        {token ? (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => navigate("/profile")}
+                  className="rounded-[12px] p-[8px] bg-transparent border-0 cursor-pointer"
+                  aria-label="Open profile"
+                >
+                  <UserAvatar size={50} />
+                </button>
+              </div>
+            ) : (
+              <Link to="/login" onClick={() => setActiveLink("/login")}>
+                <button className="rounded-[12px] p-[18px] bg-[color:var(--color-black10)] border-0 flex items-center gap-2 text-[color:var(--color-gray70)] cursor-pointer transition-transform duration-300 ease-in-out">
+                  <FiUserPlus className="w-[24px] h-[24px]" />
+                </button>
+              </Link>
+            )}
             {/* Favorites */}
             <Link to="/favorites">
               <button className="relative rounded-[12px] p-[18px] bg-[color:var(--color-black10)] border-0 cursor-pointer transition-transform duration-300 ease-in-out">
@@ -122,32 +139,6 @@ export default function Navbar() {
                 <img src={"/assets/imgs/NavBar/Union.png"} alt="basket" className="w-[24px] h-[24px]" />
               </button>
             </Link>
-
-            {/* User area: avatar + name + logout OR login icon */}
-            {token ? (
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => navigate("/profile")}
-                  className="rounded-[12px] p-[8px] bg-transparent border-0 cursor-pointer"
-                  aria-label="Open profile"
-                >
-                  <UserAvatar size={50} />
-                </button>
-
-                <div className="flex flex-col">
-                  <span className="text-sm text-white max-w-[160px] truncate">{userName}</span>
-                  <button onClick={handleLogout} className="text-xs text-gray-300 hover:text-white">
-                    Logout
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <Link to="/login" onClick={() => setActiveLink("/login")}>
-                <button className="rounded-[12px] p-[18px] bg-[color:var(--color-black10)] border-0 flex items-center gap-2 text-[color:var(--color-gray70)] cursor-pointer transition-transform duration-300 ease-in-out">
-                  <FiUserPlus className="w-[24px] h-[24px]" />
-                </button>
-              </Link>
-            )}
 
             <Link to="/contact" onClick={() => setActiveLink("/contact")}>
               <button
