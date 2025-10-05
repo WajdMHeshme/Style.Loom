@@ -3,6 +3,7 @@ import { FooterColumnData, FooterMediaData, InfinitScrollData } from '../../Data
 import LogoSvg from './LogoSvg';
 import FooterMedia from './FooterMedia'
 import FooterColumn from './FooterColumn'
+import { Link } from 'react-router-dom';
 
 export default function () {
   return (
@@ -38,8 +39,8 @@ export default function () {
       <div className="px-[162px] py-[50px] max-2xl:px-[80px] max-2xl:py-[40px] max-md:px-[16px] max-md:py-[30px] flex justify-between max-md:flex-col max-md:items-start max-md:gap-[20px]">
         <p className='text-gray40 text-[18px] xl:text-[14px]'>© 2024 StyleLoom.   All rights reserved.</p>
         <ul className="flex">
-          <li className="text-gray40 text-[18px] xl:text-[14px]">Terms & Conditions <span className='text-black20] px-[10px]'>|</span></li>
-          <li className="text-gray40 text-[18px] xl:text-[14px]" >Privacy Policy</li>
+          <li className="text-gray40 text-[18px] xl:text-[14px]"><Link to={'/terms'}>Terms & Conditions</Link> <span className='text-black20] px-[10px]'>|</span></li>
+          <li className="text-gray40 text-[18px] xl:text-[14px]" ><Link to={'/privacy'}>Privacy Policy</Link></li>
         </ul>
       </div>
     </footer>

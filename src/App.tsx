@@ -16,6 +16,8 @@ import MainLoader from "./utils/mainLoader/MainLoader";
 import ProductDetail from "./pages/ProductsDetail";
 import ProfilePage from "./pages/ProfilePage";
 import PrivateRoute from "./utils/PrivateRoute";
+import Terms from "./pages/Terms";
+import PrivacyPolicy from "./pages/Privacy";
 
 const App: React.FC = () => {
   const [firstLoading, setFirstLoading] = useState<boolean>(true);
@@ -134,6 +136,9 @@ const App: React.FC = () => {
           {/* صفحات غير محمية */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/terms" element={<Terms/>}/>
+          <Route path="/privacy" element={<PrivacyPolicy/>}/>
+          
         </Routes>
 
         {!hideLayout && <Footer />}
