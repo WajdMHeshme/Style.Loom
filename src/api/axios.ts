@@ -6,11 +6,10 @@ const api = axios.create({
     headers: {
         "Content-Type": "application/json",
     },
-    withCredentials: false, // عدّل حسب حاجتك
+    withCredentials: false,
 });
 
 
-// Add request interceptor to attach token if exists
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     if (token && config.headers) {
