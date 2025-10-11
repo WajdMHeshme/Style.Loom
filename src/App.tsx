@@ -16,6 +16,8 @@ import MainLoader from "./utils/mainLoader/MainLoader";
 import ProductDetail from "./pages/ProductsDetail";
 import ProfilePage from "./pages/ProfilePage";
 import PrivateRoute from "./utils/PrivateRoute";
+import Terms from "./pages/Terms";
+import PrivacyPolicy from "./pages/Privacy";
 
 const App: React.FC = () => {
   const [firstLoading, setFirstLoading] = useState<boolean>(true);
@@ -23,8 +25,9 @@ const App: React.FC = () => {
   const firstLoad = useRef<boolean>(true);
   const location = useLocation();
 
-  // صفحات بدون Navbar/Footer
-  const hideLayout = ["/login", "/register"].includes(location.pathname);
+  // ✅ تحديد إذا كنا في صفحة تسجيل الدخول أو التسجيل
+  const hideLayout =
+    location.pathname === "/login" || location.pathname === "/register";
 
   // MainLoader عند أول تحميل الصفحة
   useEffect(() => {
@@ -60,8 +63,13 @@ const App: React.FC = () => {
       <ScrollToTop />
 
       {/* المحتوى */}
-      <div className={`${firstLoading || loading ? "pointer-events-none select-none blur-sm" : ""}`}>
-        {!hideLayout && <Navbar />} {/* يظهر فقط إذا مش login/register */}
+      <div
+        className={`${
+          firstLoading || loading ? "pointer-events-none select-none blur-sm" : ""
+        }`}
+      >
+        {/* ✅ إظهار Navbar و Footer فقط إذا لم نكن في صفحات Auth */}
+        {!hideLayout && <Navbar />}
 
         <Routes>
           {/* افتراضي: توجه مباشرة لصفحة تسجيل الدخول */}
@@ -128,9 +136,12 @@ const App: React.FC = () => {
           {/* صفحات غير محمية */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/terms" element={<Terms/>}/>
+          <Route path="/privacy" element={<PrivacyPolicy/>}/>
+          
         </Routes>
 
-        {!hideLayout && <Footer />} {/* يظهر فقط إذا مش login/register */}
+        {!hideLayout && <Footer />}
       </div>
 
       {/* Loader عند التنقل بين الراوتات */}
@@ -144,3 +155,5 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+

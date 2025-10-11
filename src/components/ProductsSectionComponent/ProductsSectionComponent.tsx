@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState, type JSX } from "react";
-import { useNavigate } from "react-router-dom";
 import ProductComponent from "./ProductComponent";
 import TitleComponent from "../TitleComponent/TitleComponent";
 import { useAppDispatch, useAppSelector } from "../../redux/store/hooks";
 import { fetchProducts } from "../../redux/slices/productsSlice";
 
 export default function ProductsSectionComponent(): JSX.Element {
-  const navigate = useNavigate();
+
   const dispatch = useAppDispatch();
   const { items: products, loading, error } = useAppSelector((s) => s.products);
 
