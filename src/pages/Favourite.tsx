@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../redux/store/hooks";
-import { clearFavorites } from "../redux/FavoritesSlice";
+import { clearFavorites } from "../redux/slices/FavoritesSlice";
 import { MdFavoriteBorder, MdProductionQuantityLimits } from "react-icons/md";
 import ProductComponent from "../components/ProductsSectionComponent/ProductComponent";
 

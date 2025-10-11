@@ -78,7 +78,7 @@ export default function LoginPage() {
 
       // تخزين علامة البوب آب ثم التوجه
       localStorage.setItem("showLoginPopup", "true");
-      navigate("/products");
+      navigate("/home");
     } catch (err: any) {
       setError(err?.message || "Network error");
     } finally {

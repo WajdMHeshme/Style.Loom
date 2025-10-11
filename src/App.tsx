@@ -23,6 +23,9 @@ const App: React.FC = () => {
   const firstLoad = useRef<boolean>(true);
   const location = useLocation();
 
+  // صفحات بدون Navbar/Footer
+  const hideLayout = ["/login", "/register"].includes(location.pathname);
+
   // MainLoader عند أول تحميل الصفحة
   useEffect(() => {
     const t = setTimeout(() => {
@@ -58,7 +61,8 @@ const App: React.FC = () => {
 
       {/* المحتوى */}
       <div className={`${firstLoading || loading ? "pointer-events-none select-none blur-sm" : ""}`}>
-        <Navbar />
+        {!hideLayout && <Navbar />} {/* يظهر فقط إذا مش login/register */}
+
         <Routes>
           {/* افتراضي: توجه مباشرة لصفحة تسجيل الدخول */}
           <Route path="/" element={<Navigate to="/register" replace />} />
@@ -125,7 +129,8 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
-        <Footer />
+
+        {!hideLayout && <Footer />} {/* يظهر فقط إذا مش login/register */}
       </div>
 
       {/* Loader عند التنقل بين الراوتات */}
@@ -139,4 +144,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-

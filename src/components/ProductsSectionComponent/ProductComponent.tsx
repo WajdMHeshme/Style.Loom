@@ -1,8 +1,8 @@
 // src/components/ProductsSectionComponent/ProductComponent.tsx
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store/hooks";
-import { toggleFavorite } from "../../redux/FavoritesSlice";
-import type { Product as FavProduct } from "../../redux/FavoritesSlice";
+import { toggleFavorite } from "../../redux/slices/FavoritesSlice";
+import type { Product as FavProduct } from "../../redux/slices/FavoritesSlice";
 
 export type ProductProps = {
   id: number;
@@ -57,7 +57,7 @@ const ProductComponent: React.FC<ProductProps> = ({
   return (
     <div
       id={strId}
-      className={`p-[30px] border border-dashed border-black15 w-1/3 h-fit flex flex-col max-[1919px]:p-5 max-[1200px]:w-1/2 max-[540px]:w-full max-[540px]:relative ${className}`}
+      className={`p-[30px] border border-dashed border-black15 h-fit flex flex-col max-[1919px]:p-5  max-[540px]:w-full max-[540px]:relative ${className}`}
     >
       {/* Product Image */}
       <div className="w-full h-[60.4%] overflow-hidden rounded-t-[50px] max-[1919px]:rounded-t-[30px] max-[540px]:rounded-t-[20px] relative">
