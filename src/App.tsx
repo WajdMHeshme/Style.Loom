@@ -108,6 +108,17 @@ const App: React.FC = () => {
               </PrivateRoute>
             }
           />
+
+          {/* المسار المفرد المتوافق مع navigate('/product/${id}') */}
+          <Route
+            path="/product/:id"
+            element={
+              <PrivateRoute>
+                <ProductDetail />
+              </PrivateRoute>
+            }
+          />
+
           <Route
             path="/favorites"
             element={
@@ -136,9 +147,8 @@ const App: React.FC = () => {
           {/* صفحات غير محمية */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/terms" element={<Terms/>}/>
-          <Route path="/privacy" element={<PrivacyPolicy/>}/>
-          
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
         </Routes>
 
         {!hideLayout && <Footer />}

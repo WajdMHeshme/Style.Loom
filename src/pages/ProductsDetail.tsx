@@ -1,11 +1,14 @@
-import React from 'react'
-
+import ProductDetails from "./ProductDetails";
+import TestimonialSection from "../components/Testimonials/TestimonialsSection";
+import FAQComponent from "../components/FAQ/FAQSection";
 const ProductsDetail = () => {
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <>
+      <ProductDetails />
+      <TestimonialSection />
+      <FAQComponent />
+    </>
+  );
+};
 
-export default ProductsDetail
+export default ProductsDetail;

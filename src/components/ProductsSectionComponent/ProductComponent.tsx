@@ -1,5 +1,6 @@
 // src/components/ProductsSectionComponent/ProductComponent.tsx
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/store/hooks";
 import { toggleFavorite } from "../../redux/FavoritesSlice";
 import type { Product as FavProduct } from "../../redux/FavoritesSlice";
@@ -23,6 +24,7 @@ const ProductComponent: React.FC<ProductProps> = ({
   id,
   className = "",
 }) => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const favorites = useAppSelector((s: any) => s.favorites);
   const strId = String(id);
@@ -43,6 +45,16 @@ const ProductComponent: React.FC<ProductProps> = ({
     dispatch(toggleFavorite(payload));
   };
 
+  const handleCardClick = () => {
+    // نفتح صفحة التفاصيل بالـ id
+    navigate(`/product/${id}`);
+  };
+
+  const handleShopNowClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate(`/product/${id}`);
+  };
+
   const HeartIcon: React.FC<{ filled?: boolean; size?: number }> = ({ filled = false, size = 18 }) =>
     filled ? (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden>
@@ -57,7 +69,13 @@ const ProductComponent: React.FC<ProductProps> = ({
   return (
     <div
       id={strId}
-      className={`p-[30px] border border-dashed border-black15 w-1/3 h-fit flex flex-col max-[1919px]:p-5 max-[1200px]:w-1/2 max-[540px]:w-full max-[540px]:relative ${className}`}
+      onClick={handleCardClick}
+      className={`p-[30px] border border-dashed border-black15 w-1/3 h-fit flex flex-col max-[1919px]:p-5 max-[1200px]:w-1/2 max-[540px]:w-full max-[540px]:relative ${className} cursor-pointer`}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") handleCardClick();
+      }}
     >
       {/* Product Image */}
       <div className="w-full h-[60.4%] overflow-hidden rounded-t-[50px] max-[1919px]:rounded-t-[30px] max-[540px]:rounded-t-[20px] relative">
@@ -87,6 +105,7 @@ const ProductComponent: React.FC<ProductProps> = ({
 
         <button
           type="button"
+          onClick={handleShopNowClick}
           className="px-6 py-[18px] rounded-xl border border-dashed border-black25 bg-[var(--black12-color)] text-white font-[var(--main-font)] max-[1919px]:px-4 max-[1919px]:py-[14px] max-[1919px]:rounded-lg max-[854px]:px-4 max-[854px]:py-3 max-[854px]:text-xs"
         >
           Shop Now
