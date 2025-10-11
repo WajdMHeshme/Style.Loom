@@ -10,14 +10,10 @@ import { fetchCart, updateCartItem, removeCartItem } from "../redux/slices/cartS
  * - Keeps a local copy (localItems) for instant UI updates (optimistic).
  * - Calls thunks to persist changes on the backend.
  * - On failure, refetches server state to rollback and shows console error (you can replace with toast).
- *
- * NOTE:
- * - This component still relies on your cartSlice thunks (updateCartItem/removeCartItem/fetchCart).
- * - Make sure endpoints in cartApi exist as used by the thunks.
  */
 
 type LocalCartItem = {
-  id: number;        // cart-item id (unique)
+  id: number; // cart-item id (unique)
   name: string;
   price: number;
   quantity: number;
@@ -26,7 +22,7 @@ type LocalCartItem = {
 
 export default function Cart() {
   const dispatch = useAppDispatch();
-  const userId = Number(localStorage.getItem("userId") || 1);
+  const userId = useAppSelector((s: any) => s?.auth?.user?.id);
 
   // Defensive selector for Redux cart slice
   const cartState = useAppSelector((s: any) => (s && s.cart) || { items: [], totalPrice: 0, loading: false, error: null });
@@ -56,6 +52,7 @@ export default function Cart() {
   useEffect(() => {
     try {
       const mapped = Array.isArray(items) ? items.map(mapItemToLocal) : [];
+      console.log("[Cart] store.items changed -> mapped length:", mapped.length);
       setLocalItems(mapped);
     } catch (e) {
       console.error("Failed to map cart items:", e);
@@ -63,9 +60,18 @@ export default function Cart() {
     }
   }, [items]);
 
-  // Initial fetch on mount
+  // Initial fetch on mount & whenever userId changes
   useEffect(() => {
-    dispatch(fetchCart(userId));
+    console.log("[Cart] userId changed:", userId);
+    // clear local items immediately so UI doesn't show previous user's items
+    setLocalItems([]);
+
+    if (typeof userId === "number" && userId > 0) {
+      console.log("[Cart] dispatching fetchCart for user", userId);
+      dispatch(fetchCart(userId));
+    } else {
+      console.log("[Cart] no valid userId -> skipping fetchCart");
+    }
   }, [dispatch, userId]);
 
   // Helper: replace an item in localItems by id
@@ -87,13 +93,15 @@ export default function Cart() {
     replaceLocalItem(itemId, (it) => ({ ...it, quantity: it.quantity + 1 }));
 
     try {
-      // call backend to update (thunk will refetch on success)
-      await dispatch(updateCartItem({ userId, itemId, quantity: current.quantity + 1 })).unwrap();
-      // success -> cartSlice's fetchCart will sync and override localItems via effect
+      if (typeof userId === "number" && userId > 0) {
+        await dispatch(updateCartItem({ userId, itemId, quantity: current.quantity + 1 })).unwrap();
+        // success -> fetchCart already awaited inside thunk, store will update and effect above will sync localItems
+      } else {
+        console.warn("[Cart] increaseQuantity: no userId, skipping backend update");
+      }
     } catch (err) {
       console.error("Failed to increase quantity:", err);
-      // rollback by refetching server state
-      await dispatch(fetchCart(userId));
+      if (typeof userId === "number" && userId > 0) await dispatch(fetchCart(userId));
     }
   };
 
@@ -104,17 +112,18 @@ export default function Cart() {
 
     // if would remove:
     if (current.quantity - 1 <= 0) {
-      // optimistic remove
       const backup = localItems.slice();
       removeLocalItem(itemId);
       try {
-        await dispatch(removeCartItem({ userId, itemId })).unwrap();
-        // success: server state will be fetched by thunk
+        if (typeof userId === "number" && userId > 0) {
+          await dispatch(removeCartItem({ userId, itemId })).unwrap();
+        } else {
+          console.warn("[Cart] decreaseQuantity/remove: no userId, skipping backend call");
+        }
       } catch (err) {
         console.error("Failed to remove item:", err);
-        // rollback local list
         setLocalItems(backup);
-        await dispatch(fetchCart(userId));
+        if (typeof userId === "number" && userId > 0) await dispatch(fetchCart(userId));
       }
       return;
     }
@@ -123,11 +132,14 @@ export default function Cart() {
     replaceLocalItem(itemId, (it) => ({ ...it, quantity: it.quantity - 1 }));
 
     try {
-      await dispatch(updateCartItem({ userId, itemId, quantity: current.quantity - 1 })).unwrap();
+      if (typeof userId === "number" && userId > 0) {
+        await dispatch(updateCartItem({ userId, itemId, quantity: current.quantity - 1 })).unwrap();
+      } else {
+        console.warn("[Cart] decreaseQuantity: no userId, skipping backend update");
+      }
     } catch (err) {
       console.error("Failed to decrease quantity:", err);
-      // rollback by refetch
-      await dispatch(fetchCart(userId));
+      if (typeof userId === "number" && userId > 0) await dispatch(fetchCart(userId));
     }
   };
 
@@ -137,13 +149,15 @@ export default function Cart() {
     removeLocalItem(itemId);
 
     try {
-      await dispatch(removeCartItem({ userId, itemId })).unwrap();
-      // success -> server canonical state will be pulled
+      if (typeof userId === "number" && userId > 0) {
+        await dispatch(removeCartItem({ userId, itemId })).unwrap();
+      } else {
+        console.warn("[Cart] removeFromCart: no userId, skipping backend call");
+      }
     } catch (err) {
       console.error("Failed to remove item:", err);
-      // rollback
       setLocalItems(backup);
-      await dispatch(fetchCart(userId));
+      if (typeof userId === "number" && userId > 0) await dispatch(fetchCart(userId));
     }
   };
 
@@ -159,6 +173,9 @@ export default function Cart() {
     { id: "paypal", name: "PayPal", image: "/assets/imgs/checkout/paypal.svg" },
     { id: "applepay", name: "Apple Pay", image: "/assets/imgs/checkout/applepay.svg" },
   ];
+
+  // If not logged in show message (same UX as requested)
+  if (!userId) return <p className="text-center text-white py-12">Please log in to see your cart.</p>;
 
   return (
     <div className="w-full bg-neutral-950 2xl:px-[162px] md:px-[80px] px-[16px] pt-[200px] min-h-screen">
@@ -250,7 +267,6 @@ export default function Cart() {
             <button
               className="w-full bg-yellow-700 text-white py-3 rounded-xl font-medium"
               onClick={() => {
-                // close popup; real checkout flow should call payment gateway / create order endpoint
                 setOpenPopUp(false);
               }}
             >

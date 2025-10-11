@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useAppDispatch } from "../redux/store/hooks";
+import { setUser } from "../redux/slices/authSlice";
 
 /** فكّ payload من JWT */
 function decodeJwtPayload(token: string) {
@@ -29,6 +31,7 @@ export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const API_BASE = (import.meta as any).env?.VITE_API_BASE || "http://localhost:3000";
   const REGISTER_URL = `${API_BASE}/api/auth/register`;
@@ -71,8 +74,9 @@ export default function RegisterPage() {
         return;
       }
 
-      // التوكن واسم المستخدم
+      // التوكن واسم المستخدم و id
       const token = body?.token || body?.accessToken || body?.data?.token;
+      const userId = body?.user?.id ?? body?.data?.user?.id ?? (token ? decodeJwtPayload(token)?.id : undefined);
       let userName = body?.user?.first_name || body?.user?.username || body?.first_name || body?.name;
 
       if (!userName && token) {
@@ -82,6 +86,25 @@ export default function RegisterPage() {
 
       if (token) localStorage.setItem("token", token);
       if (userName) localStorage.setItem("user_name", userName);
+
+      // dispatch to redux
+      if (userId) {
+        dispatch(setUser({
+          id: Number(userId),
+          firstName: userName ?? undefined,
+          token: token ?? undefined,
+        }));
+      } else {
+        const payload = token ? decodeJwtPayload(token) : null;
+        const maybeId = payload?.id || payload?.userId;
+        if (maybeId) {
+          dispatch(setUser({
+            id: Number(maybeId),
+            firstName: userName ?? undefined,
+            token: token ?? undefined,
+          }));
+        }
+      }
 
       // مباشرة للـ Products بعد التسجيل
       navigate("/products");

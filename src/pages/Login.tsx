@@ -1,6 +1,9 @@
+// src/pages/LoginPage.tsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useAppDispatch } from "../redux/store/hooks";
+import { setUser } from "../redux/slices/authSlice";
 
 function decodeJwtPayload(token: string | null) {
   if (!token) return null;
@@ -27,6 +30,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const API_BASE = (import.meta as any).env?.VITE_API_BASE || "http://localhost:3000";
   const LOGIN_URL = `${API_BASE}/api/auth/login`;
@@ -64,17 +68,40 @@ export default function LoginPage() {
       }
 
       const token = body?.token || body?.accessToken || null;
+      // try to find user id/name either from body.user or from token payload
+      const userId = body?.user?.id ?? body?.user?.userId ?? (token ? decodeJwtPayload(token)?.id : undefined);
       let userName = body?.user?.first_name || body?.user?.name || null;
       if (!userName && token) {
         const payload = decodeJwtPayload(token);
         userName = payload?.first_name || payload?.name || null;
       }
 
+      // Keep storing token in storage like before (session or persistent)
       if (token) {
         if (remember) localStorage.setItem("token", token);
         else sessionStorage.setItem("token", token);
       }
       if (userName) localStorage.setItem("user_name", userName);
+
+      // Dispatch to redux: set user (so other components read userId from store)
+      if (userId) {
+        dispatch(setUser({
+          id: Number(userId),
+          firstName: userName ?? undefined,
+          token: token ?? undefined,
+        }));
+      } else {
+        // if backend doesn't return id, attempt to decode from token
+        const payload = token ? decodeJwtPayload(token) : null;
+        const maybeId = payload?.id || payload?.userId;
+        if (maybeId) {
+          dispatch(setUser({
+            id: Number(maybeId),
+            firstName: userName ?? undefined,
+            token: token ?? undefined,
+          }));
+        }
+      }
 
       // تخزين علامة البوب آب ثم التوجه
       localStorage.setItem("showLoginPopup", "true");
@@ -177,4 +204,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

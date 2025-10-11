@@ -1,6 +1,7 @@
 // src/redux/slices/cartSlice.ts
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
 import { addToCartApi, fetchCartApi, updateCartItemApi, removeCartItemApi } from "../../api/cartApi";
+import { setAuthToken } from "../../api/axios";
 
 export type CartProduct = {
     id: number; // cart item id
@@ -30,52 +31,97 @@ const initialState: CartState = {
     error: null,
 };
 
-export const fetchCart = createAsyncThunk("cart/fetch", async (userId: number, { rejectWithValue }) => {
+/** helper to set token from state or fallback to localStorage */
+function ensureAuthHeader(getState: any) {
     try {
-        const data = await fetchCartApi(userId);
-        return data;
-    } catch (err: any) {
-        return rejectWithValue(err?.response?.data?.message || err.message || "Failed to fetch cart");
+        const state = getState() as any;
+        const token = state?.auth?.user?.token ?? localStorage.getItem("token");
+        setAuthToken(token ?? null);
+    } catch (e) {
+        const token = localStorage.getItem("token");
+        setAuthToken(token ?? null);
     }
-});
+}
+
+export const fetchCart = createAsyncThunk(
+    "cart/fetch",
+    async (userId: number, { getState, rejectWithValue }) => {
+        try {
+            ensureAuthHeader(getState);
+            const data = await fetchCartApi(userId);
+            console.log("[cart/fetch] userId", userId, "->", data);
+            return data;
+        } catch (err: any) {
+            console.error("[cart/fetch] error", err);
+            return rejectWithValue(err?.message || "Failed to fetch cart");
+        }
+    }
+);
 
 export const addToCart = createAsyncThunk(
     "cart/add",
-    async (payload: { userId: number; productId: number; quantity?: number }, { dispatch, rejectWithValue }) => {
+    async (
+        payload: { userId: number; productId: number; quantity?: number },
+        { dispatch, getState, rejectWithValue }
+    ) => {
         try {
-            const body = { userId: payload.userId, productId: payload.productId, quantity: payload.quantity ?? 1 };
-            const res = await addToCartApi(body);
-            // refresh cart after success to keep canonical state
-            await dispatch(fetchCart(payload.userId));
+            ensureAuthHeader(getState);
+            console.log("[cart/add] payload:", payload);
+
+            if (!payload?.userId || !payload?.productId) {
+                return rejectWithValue("Missing userId or productId");
+            }
+
+            const res = await addToCartApi({
+                userId: payload.userId,
+                productId: payload.productId,
+                quantity: payload.quantity ?? 1,
+            });
+
+            console.log("[cart/add] api response:", res);
+
+            // force refresh canonical cart and wait for it to finish
+            await dispatch(fetchCart(payload.userId)).unwrap();
+
             return res;
         } catch (err: any) {
-            return rejectWithValue(err?.response?.data?.message || err.message || "Failed to add to cart");
+            console.error("[cart/add] error:", err);
+            return rejectWithValue(err?.message || "Failed to add to cart");
         }
     }
 );
 
 export const updateCartItem = createAsyncThunk(
     "cart/updateItem",
-    async ({ userId, itemId, quantity }: { userId: number; itemId: number; quantity: number }, { dispatch, rejectWithValue }) => {
+    async (
+        { userId, itemId, quantity }: { userId: number; itemId: number; quantity: number },
+        { dispatch, getState, rejectWithValue }
+    ) => {
         try {
+            ensureAuthHeader(getState);
             const res = await updateCartItemApi(userId, itemId, quantity);
-            await dispatch(fetchCart(userId));
+            console.log("[cart/updateItem] api resp:", res);
+            await dispatch(fetchCart(userId)).unwrap();
             return res;
         } catch (err: any) {
-            return rejectWithValue(err?.response?.data?.message || err.message || "Failed to update cart item");
+            console.error("[cart/updateItem] error:", err);
+            return rejectWithValue(err?.message || "Failed to update cart item");
         }
     }
 );
 
 export const removeCartItem = createAsyncThunk(
     "cart/removeItem",
-    async ({ userId, itemId }: { userId: number; itemId: number }, { dispatch, rejectWithValue }) => {
+    async ({ userId, itemId }: { userId: number; itemId: number }, { dispatch, getState, rejectWithValue }) => {
         try {
+            ensureAuthHeader(getState);
             const res = await removeCartItemApi(userId, itemId);
-            await dispatch(fetchCart(userId));
+            console.log("[cart/removeItem] api resp:", res);
+            await dispatch(fetchCart(userId)).unwrap();
             return res;
         } catch (err: any) {
-            return rejectWithValue(err?.response?.data?.message || err.message || "Failed to remove cart item");
+            console.error("[cart/removeItem] error:", err);
+            return rejectWithValue(err?.message || "Failed to remove cart item");
         }
     }
 );

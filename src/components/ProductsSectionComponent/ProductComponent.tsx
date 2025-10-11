@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/store/hooks";
 import { toggleFavorite } from "../../redux/slices/FavoritesSlice";
 import { addToCart } from "../../redux/slices/cartSlice";
-import SuccessMessage from "../../utils/SuccessMessage"; // <-- make sure this path matches your file
+import SuccessMessage from "../../utils/SuccessMessage"; // adjust path if necessary
 import type { Product as FavProduct } from "../../redux/slices/FavoritesSlice";
 
 export type ProductProps = {
@@ -33,6 +33,11 @@ const ProductComponent: React.FC<ProductProps> = ({
   const isFav = favorites.some((p: any) => p.id === strId);
   const parsedPrice = typeof price === "number" ? price : Number(price);
 
+  // Get userId from redux auth slice (fallback to 1 only as default development id)
+  const userIdFromStore = useAppSelector((s: any) => s.auth?.user?.id);
+  // keep same behavior as before (default 1) but we now read from redux first
+  const userId = typeof userIdFromStore === "number" && userIdFromStore > 0 ? Number(userIdFromStore) : 1;
+
   // local state to control the success popup visibility and message
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | undefined>(undefined);
@@ -55,10 +60,8 @@ const ProductComponent: React.FC<ProductProps> = ({
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    // get userId from your auth (fallback to 1 for local dev)
-    const userId = Number(localStorage.getItem("userId") || 1);
-
     try {
+      console.log("[UI] Add to cart clicked:", { userId, productId: id });
       // call thunk and unwrap result so we can catch errors as exceptions
       await dispatch(addToCart({ userId, productId: id, quantity: 1 })).unwrap();
 
@@ -68,6 +71,8 @@ const ProductComponent: React.FC<ProductProps> = ({
     } catch (err) {
       console.error("Add to cart failed:", err);
       // optionally show an error toast here
+      setSuccessMessage("Failed to add to cart.");
+      setShowSuccess(true);
     }
   };
 
@@ -79,7 +84,6 @@ const ProductComponent: React.FC<ProductProps> = ({
 
   // Navigate to product details page (passes product in location.state)
   const handleNavigateToDetails = () => {
-    // pass minimal product shape expected by ProductsDetail via location.state.product
     const productForState = {
       id,
       name: title,
@@ -100,7 +104,6 @@ const ProductComponent: React.FC<ProductProps> = ({
     }
   };
 
-  // Heart icon (same as before)
   const HeartIcon: React.FC<{ filled?: boolean; size?: number }> = ({ filled = false, size = 18 }) =>
     filled ? (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden>
