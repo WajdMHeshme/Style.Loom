@@ -1,7 +1,7 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store/hooks";
-import { toggleFavorite } from "../../redux/FavoritesSlice";
-import type { Product as FavProduct } from"../../redux/FavoritesSlice";
+import { toggleFavorite } from "../../redux/slices/FavoritesSlice";
+import type { Product as FavProduct } from"../../redux/slices/FavoritesSlice";
 
 // Props interface
 interface ProductComponentProps {
