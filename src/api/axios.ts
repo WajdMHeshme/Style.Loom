@@ -1,22 +1,22 @@
+// src/api/axios.ts
 import axios from "axios";
 
+const API_BASE = (import.meta as any).env?.VITE_API_BASE || "http://localhost:3000/api";
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api",
+    baseURL: API_BASE,
     headers: {
         "Content-Type": "application/json",
     },
-    withCredentials: false,
+    // withCredentials: true, // uncomment if your backend uses cookies
 });
 
-
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    if (token && config.headers) {
-        config.headers["Authorization"] = `Bearer ${token}`;
+export function setAuthToken(token?: string | null) {
+    if (token) {
+        api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } else {
+        delete api.defaults.headers.common["Authorization"];
     }
-    return config;
-});
-
+}
 
 export default api;

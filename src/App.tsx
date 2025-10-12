@@ -18,16 +18,57 @@ import ProfilePage from "./pages/ProfilePage";
 import PrivateRoute from "./utils/PrivateRoute";
 import Terms from "./pages/Terms";
 import PrivacyPolicy from "./pages/Privacy";
+import { setAuthToken } from "./api/axios";
+import { decodeJwtPayload } from "./utils/jwt";
+import { useAppDispatch } from "./redux/store/hooks";
+import { setUser } from "./redux/slices/authSlice";
 
 const App: React.FC = () => {
   const [firstLoading, setFirstLoading] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
+  const [authReady, setAuthReady] = useState<boolean>(false); // NEW: indicates we've restored auth (or decided there's none)
   const firstLoad = useRef<boolean>(true);
   const location = useLocation();
+  const dispatch = useAppDispatch();
 
-  // ✅ تحديد إذا كنا في صفحة تسجيل الدخول أو التسجيل
-  const hideLayout =
-    location.pathname === "/login" || location.pathname === "/register";
+  // hide layout for auth routes
+  const hideLayout = location.pathname === "/login" || location.pathname === "/register";
+
+  // --- Initialize auth on app start ---
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          // set axios auth header for all subsequent requests
+          setAuthToken(token);
+
+          // try to decode token to get a user id (fast, offline)
+          const payload = decodeJwtPayload(token);
+          const id = payload?.id ?? payload?.userId ?? payload?.sub;
+          const firstName = payload?.first_name || payload?.name || payload?.username;
+
+          if (id) {
+            // dispatch setUser so store is populated before routes render
+            dispatch(setUser({ id: Number(id), firstName: firstName ?? undefined, token }));
+          } else {
+            // إذا التوكن لا يحتوي id، نكتفي بضبط الهيدر؛ يمكنك هنا استدعاء /auth/me إذا متوفر
+            // مثال (غير مفعل): const me = await api.get('/auth/me');
+            // dispatch(setUser({ id: me.data.id, firstName: me.data.first_name, token }));
+          }
+        }
+      } catch (e) {
+        console.error("Auth init failed:", e);
+        // clean up on error
+        setAuthToken(null);
+        localStorage.removeItem("token");
+      } finally {
+        setAuthReady(true);
+      }
+    })();
+    // run once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   // MainLoader عند أول تحميل الصفحة
   useEffect(() => {
@@ -51,6 +92,17 @@ const App: React.FC = () => {
     return () => clearTimeout(t);
   }, [location]);
 
+  // If auth not yet ready, show main loader (so Cart won't render empty on refresh)
+  if (!authReady) {
+    return (
+      <div className="bg-black06 min-h-screen relative">
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center">
+          <MainLoader />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-black06 min-h-screen relative">
       {/* MainLoader أول مرة */}
@@ -62,20 +114,12 @@ const App: React.FC = () => {
 
       <ScrollToTop />
 
-      {/* المحتوى */}
-      <div
-        className={`${
-          firstLoading || loading ? "pointer-events-none select-none blur-sm" : ""
-        }`}
-      >
-        {/* ✅ إظهار Navbar و Footer فقط إذا لم نكن في صفحات Auth */}
+      <div className={`${firstLoading || loading ? "pointer-events-none select-none blur-sm" : ""}`}>
         {!hideLayout && <Navbar />}
 
         <Routes>
-          {/* افتراضي: توجه مباشرة لصفحة تسجيل الدخول */}
           <Route path="/" element={<Navigate to="/register" replace />} />
 
-          {/* صفحات محمية */}
           <Route
             path="/home"
             element={
@@ -108,8 +152,6 @@ const App: React.FC = () => {
               </PrivateRoute>
             }
           />
-
-          {/* المسار المفرد المتوافق مع navigate('/product/${id}') */}
           <Route
             path="/product/:id"
             element={
@@ -118,7 +160,6 @@ const App: React.FC = () => {
               </PrivateRoute>
             }
           />
-
           <Route
             path="/favorites"
             element={
@@ -144,7 +185,6 @@ const App: React.FC = () => {
             }
           />
 
-          {/* صفحات غير محمية */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/terms" element={<Terms />} />
@@ -154,7 +194,6 @@ const App: React.FC = () => {
         {!hideLayout && <Footer />}
       </div>
 
-      {/* Loader عند التنقل بين الراوتات */}
       {!firstLoading && loading && (
         <div className="fixed inset-0 z-40 bg-black/40 flex items-center justify-center">
           <Loader size="w-12 h-12" center={true} />
@@ -165,5 +204,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-
