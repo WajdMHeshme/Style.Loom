@@ -190,3 +190,4 @@ const ProductComponent: React.FC<ProductProps> = ({
 };
 
 export default ProductComponent;
+ 

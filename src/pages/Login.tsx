@@ -1,6 +1,6 @@
 // src/pages/LoginPage.tsx
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,  } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useAppDispatch } from "../redux/store/hooks";
 import { setUser } from "../redux/slices/authSlice";
@@ -30,6 +30,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
   const dispatch = useAppDispatch();
 
   const API_BASE = (import.meta as any).env?.VITE_API_BASE || "http://localhost:3000";
@@ -105,7 +106,7 @@ export default function LoginPage() {
 
       // تخزين علامة البوب آب ثم التوجه
       localStorage.setItem("showLoginPopup", "true");
-      navigate("/home");
+      navigate("/products");
     } catch (err: any) {
       setError(err?.message || "Network error");
     } finally {
