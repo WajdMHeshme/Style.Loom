@@ -1,7 +1,10 @@
 // src/pages/ProductsDetail.tsx
 import { useEffect, useState, type JSX } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-
+import { useAppDispatch, useAppSelector } from "../redux/store/hooks";
+import { addToCart } from "../redux/slices/cartSlice";
+import SuccessMessage from "../utils/SuccessMessage"; // عدّل المسار إذا مختلف
+// Types
 type RawProduct = {
   id: number;
   name: string;
@@ -25,6 +28,7 @@ export default function ProductDetails(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [product, setProduct] = useState<RawProduct | null>(
     (location.state as any)?.product ?? null
@@ -32,6 +36,14 @@ export default function ProductDetails(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(product ? false : true);
   const [, setError] = useState<string | null>(null);
   const [mainImg, setMainImg] = useState<string | null>(null);
+
+  // success popup state (same behavior as ProductComponent)
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | undefined>(undefined);
+
+  // get userId from redux (fallback to 1 as before)
+  const userIdFromStore = useAppSelector((s: any) => s.auth?.user?.id);
+  const userId = typeof userIdFromStore === "number" && userIdFromStore > 0 ? Number(userIdFromStore) : 1;
 
   useEffect(() => {
     if (product) {
@@ -90,18 +102,41 @@ export default function ProductDetails(): JSX.Element {
     return "/assets/imgs/default-product.jpg";
   }
 
-  function handleAddToCart() {
-    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-      return;
+  // --- New: Add to cart handler (same behavior as ProductComponent) ---
+  async function handleAddToCart() {
+    // same fallback behavior as ProductComponent: read userId from store then fallback to 1
+    try {
+      console.log("[ProductDetail] Add to cart clicked:", { userId, productId: id });
+      // dispatch thunk and wait for result
+      await dispatch(addToCart({ userId, productId: Number(id ?? product?.id ?? 0), quantity: 1 })).unwrap();
+
+      // success UI (same message style)
+      const title = product?.name ?? "Product";
+      setSuccessMessage(`${title} has been added to your cart.`);
+      setShowSuccess(true);
+    } catch (err: any) {
+      console.error("[ProductDetail] addToCart failed:", err);
+      setSuccessMessage("Failed to add to cart.");
+      setShowSuccess(true);
     }
-    navigate("/cart");
   }
 
-  function handleShopNow() {
-    handleAddToCart();
+  // Shop Now: add then navigate to /cart (wait for add to complete)
+  async function handleShopNow() {
+    try {
+      await handleAddToCart();
+      // small delay so user sees success briefly before redirecting (optional)
+      setTimeout(() => navigate("/cart"), 250);
+    } catch {
+      // if add failed, handleAddToCart already shows failure message
+    }
   }
+
+  // Close handler for success popup
+  const handleSuccessClose = () => {
+    setShowSuccess(false);
+    setSuccessMessage(undefined);
+  };
 
   const featuresFromDescription = (txt?: string) => {
     if (!txt) return [];
@@ -127,16 +162,15 @@ export default function ProductDetails(): JSX.Element {
             <p className="text-sm text-gray-400 mt-2">
               {product?.description
                 ? product.description.slice(0, 120) +
-                  (product.description.length > 120 ? "..." : "")
+                (product.description.length > 120 ? "..." : "")
                 : "-"}
             </p>
             <div className="mt-3">
               <span
-                className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-                  (product?.stock ?? 0) > 0
+                className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${(product?.stock ?? 0) > 0
                     ? "bg-black15 text-white"
                     : "bg-red-700 text-white"
-                }`}
+                  }`}
               >
                 {(product?.stock ?? 0) > 0 ? "In stock" : "Out of stock"}
               </span>
@@ -220,6 +254,16 @@ export default function ProductDetails(): JSX.Element {
           </div>
         </section>
       </div>
+
+      {/* Success popup - same component & behavior as ProductComponent */}
+      <SuccessMessage
+        isVisible={showSuccess}
+        onClose={handleSuccessClose}
+        title={successMessage ? (successMessage.includes("Failed") ? "Error" : "Added to cart") : "Added to cart"}
+        message={successMessage}
+        autoClose={true}
+        autoCloseDelay={3500}
+      />
     </div>
   );
 }
