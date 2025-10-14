@@ -1,22 +1,21 @@
 
 interface TestimonialCardProps {
-  person: string;
   personName: string;
   personCity: string;
   description: string;
+  rating?: number; // <-- new prop (optional, default handled below)
   border?: "border1" | "border2" | "border3" | "border4" | "border5" | "border6" | string;
   className?: string;
 }
 
 export default function TestimonialCard({
-  person,
   personName,
   personCity,
   description,
+  rating = 5,
   border = "",
   className = "",
 }: TestimonialCardProps) {
-  // map your old border classes to Tailwind utilities + inline styles for color
   const borderStyles: Record<string, string> = {
     border1: "border-b-2 border-dashed border-black15",
     border2: "border-b-2 border-l-2 border-dashed border-black15",
@@ -38,17 +37,27 @@ export default function TestimonialCard({
   const appliedBorderClass = border && borderStyles[border] ? borderStyles[border] : "";
   const appliedDesignClass = border && designPosition[border] ? designPosition[border] : "absolute bottom-0 right-0";
 
+  const getInitials = (fullName: string) => {
+    if (!fullName) return "";
+    const parts = fullName.trim().split(/\s+/);
+    const first = parts[0] || fullName;
+    return first.slice(0, 2).toUpperCase();
+  };
+
+  const initials = getInitials(personName);
+
   return (
     <section
       className={`relative w-full bg-transparent ${appliedBorderClass} ${className} p-6 md:p-12 sm:p-8 h-[385px] md:h-[312px] lg:h-[312px] sm:h-[241px] overflow-hidden`}
     >
       <div className="flex items-center justify-between flex-col sm:flex-row">
         <div className="flex items-center">
-          <img
-            src={person}
-            alt={personName}
-            className="w-20 h-20 rounded-full mr-3 md:w-16 md:h-16 sm:w-12 sm:h-12 object-cover"
-          />
+          <div
+            className="w-20 h-20 rounded-full mr-3 md:w-16 md:h-16 sm:w-12 sm:h-12 flex items-center justify-center text-xl md:text-lg sm:text-base font-semibold text-white bg-brown70"
+            aria-hidden
+          >
+            {initials}
+          </div>
 
           <div className="flex flex-col">
             <span className="text-xl font-medium text-white leading-7 md:text-lg sm:text-base">
@@ -60,8 +69,7 @@ export default function TestimonialCard({
           </div>
         </div>
 
-        {/* Twitter icon - using react-icons is fine, but keep it styled with Tailwind */}
-        <div className="">
+        <div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -76,28 +84,32 @@ export default function TestimonialCard({
 
       <div className="mt-10 md:mt-8 sm:mt-6">
         <div className="flex items-center mb-6 md:mb-4 sm:mb-3">
-          {/* 5 golden stars */}
-          <svg className="w-6 h-6 mr-1 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="#FFCE22" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-            <path d="M12 .587l3.668 7.431L23.5 9.75l-5.75 5.6L19.336 24 12 19.897 4.664 24l1.586-8.65L.5 9.75l7.832-1.732L12 .587z" />
-          </svg>
-          <svg className="w-6 h-6 mr-1 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="#FFCE22" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-            <path d="M12 .587l3.668 7.431L23.5 9.75l-5.75 5.6L19.336 24 12 19.897 4.664 24l1.586-8.65L.5 9.75l7.832-1.732L12 .587z" />
-          </svg>
-          <svg className="w-6 h-6 mr-1 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="#FFCE22" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-            <path d="M12 .587l3.668 7.431L23.5 9.75l-5.75 5.6L19.336 24 12 19.897 4.664 24l1.586-8.65L.5 9.75l7.832-1.732L12 .587z" />
-          </svg>
-          <svg className="w-6 h-6 mr-1 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="#FFCE22" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-            <path d="M12 .587l3.668 7.431L23.5 9.75l-5.75 5.6L19.336 24 12 19.897 4.664 24l1.586-8.65L.5 9.75l7.832-1.732L12 .587z" />
-          </svg>
-          <svg className="w-6 h-6 mr-1 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="#FFCE22" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-            <path d="M12 .587l3.668 7.431L23.5 9.75l-5.75 5.6L19.336 24 12 19.897 4.664 24l1.586-8.65L.5 9.75l7.832-1.732L12 .587z" />
-          </svg>
+          {/* dynamic stars based on rating */}
+          {Array.from({ length: 5 }).map((_, i) => {
+            const idx = i + 1;
+            const filled = idx <= Math.round(rating);
+            return (
+              <svg
+                key={idx}
+                className="w-6 h-6 mr-1 sm:w-5 sm:h-5"
+                viewBox="0 0 24 24"
+                fill={filled ? "#FFCE22" : "none"}
+                stroke={filled ? "none" : "#6b7280"}
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden
+              >
+                <path
+                  d="M12 .587l3.668 7.431L23.5 9.75l-5.75 5.6L19.336 24 12 19.897 4.664 24l1.586-8.65L.5 9.75l7.832-1.732L12 .587z"
+                  strokeWidth={filled ? 0 : 1}
+                />
+              </svg>
+            );
+          })}
         </div>
 
         <p className="text-base text-gray50 leading-7 md:text-sm sm:text-sm">{description}</p>
       </div>
 
-      {/* design image positioned depending on the border variant */}
       <img
         src={"/assets/imgs/Testimonials/Design.png"}
         alt="Design element"

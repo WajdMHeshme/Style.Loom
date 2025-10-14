@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { Link } from "react-router-dom";
 
 const InfoSection: FC = () => {
   return (
@@ -70,7 +71,7 @@ const InfoSection: FC = () => {
                 shadow-sm
               "
             >
-              <span>Shop Now</span>
+              <span><Link to={'/products'}>  Shop Now  </Link> </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-3 h-3"
