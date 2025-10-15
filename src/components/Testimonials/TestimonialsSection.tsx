@@ -359,12 +359,10 @@ const AddReviewModal: React.FC<{
                     <button
                       type="button"
                       onClick={() => !submitting && startClose()}
-                      className="px-4 py-2 rounded-md border"
+                      className="px-4 py-2 rounded-md border text-white bg-transparent"
                       disabled={submitting}
                       style={{
                         borderColor: "rgba(255,255,255,0.06)",
-                        color: "white",
-                        background: "transparent",
                       }}
                     >
                       Cancel
@@ -372,10 +370,9 @@ const AddReviewModal: React.FC<{
 
                     <button
                       type="submit"
-                      className="px-5 py-2 rounded-md text-white"
+                      className="px-5 py-2 rounded-md text-white bg-brown60"
                       disabled={submitting}
                       style={{
-                        background: "var(--color-brown60)",
                         boxShadow: "0 6px 18px rgba(174,155,132,0.12)",
                         opacity: submitting ? 0.85 : 1,
                       }}
