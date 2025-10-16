@@ -68,7 +68,6 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user_name");
-    // لو هواتف أو فتح الmenu
     setMenuOpen(false);
     navigate("/login");
   };
@@ -188,9 +187,9 @@ export default function Navbar() {
         >
           <div className="flex flex-col items-center gap-[18px]">
             <Link
-              to="/"
+              to="/home"
               onClick={() => {
-                setActiveLink("/");
+                setActiveLink("/home");
                 setMenuOpen(false);
               }}
             >

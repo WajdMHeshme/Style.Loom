@@ -48,7 +48,7 @@ export default function TestimonialCard({
 
   return (
     <section
-      className={`relative w-full bg-transparent ${appliedBorderClass} ${className} p-6 md:p-12 sm:p-8 h-[385px] md:h-[312px] lg:h-[312px] sm:h-[241px] overflow-hidden`}
+      className={`relative break-all w-full bg-transparent ${appliedBorderClass} ${className} p-6 md:p-12 sm:p-8 h-[385px] md:h-[312px] lg:h-[312px] sm:h-[241px] overflow-hidden`}
     >
       <div className="flex items-center justify-between flex-col sm:flex-row">
         <div className="flex items-center">

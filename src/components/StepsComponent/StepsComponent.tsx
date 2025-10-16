@@ -12,7 +12,6 @@ function StepsComponent() {
                         desc="At StyleLoom, we've designed a straightforward shopping experience to make fashion accessible."
                         img={"/assets/imgs/Vector.png"}
                         fullImage={true}
-                        imgMobile={true}
                     />
                 </div>
 

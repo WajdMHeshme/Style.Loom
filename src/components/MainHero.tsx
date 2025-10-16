@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { tabData } from "../Data/HeroCompData";
 import CountUp from "react-countup";
+import { Link } from "react-router-dom";
 
 // تعريف نوع البيانات القادمة من tabData
 interface TabContent {
@@ -67,13 +68,12 @@ export default function HeroComponent() {
   "
 >
   <span className="flex items-center text-[12px] lg:text-lg gap-1 font-medium">
-    Shop Now
+     <Link to={'/products'}>Shop Now</Link>
     <span className="hidden sm:block">
       <img src={"/assets/imgs/Icons/Icon-8.png"} alt="arrow" className="w-4 h-4 inline-block" />
     </span>
   </span>
 
-  {/* الحواف الذهبية */}
   <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#AE9B84] rounded-tl-[12px]" />
   <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#AE9B84] rounded-tr-[12px]" />
   <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#AE9B84] rounded-bl-[12px]" />
@@ -87,12 +87,8 @@ export default function HeroComponent() {
 
 
         </div>
-
-        {/* الجزء السفلي */}
         <div className="flex flex-col lg:flex-row">
-          {/* القسم الأيسر */}
           <div className="w-full lg:w-1/2 px-5 md:px-20 py-14 lg:py-[100px] lg:px-[80px] text-center lg:text-left">
-            {/* Tabs */}
 <ul className="flex flex-wrap justify-around md:justify-start gap-3">
   {Object.keys(tabData).map((tab) => (
     <li key={tab}>
@@ -100,8 +96,8 @@ export default function HeroComponent() {
         className={`
           inline-flex items-center justify-center
           rounded-xl px-6 py-3 cursor-pointer font-mono transition
-          border border-dashed border-black20   /* البوردر */
-          text-[#B3B3B2]                        /* لون النص */
+          border border-dashed border-black20
+          text-[#B3B3B2]                        
           hover:bg-brown60 hover:text-white
           ${activeTab === tab ? "bg-brown60 text-white" : ""}
         `}
@@ -119,8 +115,6 @@ export default function HeroComponent() {
             </h2>
             <p className="max-w-xl text-sm md:text-base lg:text-lg text-gray40">{descTab}</p>
           </div>
-
-          {/* القسم الأيمن (العدادات) */}
           <div
             ref={counterRef}
             className="w-full lg:w-1/2 flex flex-col border-dashed border-l border-black20"

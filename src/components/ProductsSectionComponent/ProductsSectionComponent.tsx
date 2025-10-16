@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from "../../redux/store/hooks";
 import { fetchProducts } from "../../redux/slices/productsSlice";
 
 export default function ProductsSectionComponent(): JSX.Element {
-
   const dispatch = useAppDispatch();
   const { items: products, loading, error } = useAppSelector((s) => s.products);
 
@@ -13,17 +12,25 @@ export default function ProductsSectionComponent(): JSX.Element {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(3); // default
 
-  // Adjust itemsPerPage on window resize
+  // track if screen is md (>=768px) or larger
+  const [isMdUp, setIsMdUp] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    return window.innerWidth >= 768;
+  });
+
+  // Adjust itemsPerPage and isMdUp on window resize
   useEffect(() => {
-    const updateItemsPerPage = () => {
+    const update = () => {
       const width = window.innerWidth;
       if (width >= 1024) setItemsPerPage(3); // large
       else if (width >= 768) setItemsPerPage(2); // medium
       else setItemsPerPage(1); // small
+
+      setIsMdUp(width >= 768);
     };
-    updateItemsPerPage();
-    window.addEventListener("resize", updateItemsPerPage);
-    return () => window.removeEventListener("resize", updateItemsPerPage);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
 
   useEffect(() => {
@@ -32,7 +39,9 @@ export default function ProductsSectionComponent(): JSX.Element {
 
   const filteredProducts = useMemo(() => {
     if (activeTab === "All") return products;
-    return products.filter((p) => p.category?.toLowerCase() === activeTab.toLowerCase());
+    return products.filter(
+      (p) => p.category?.toLowerCase() === activeTab.toLowerCase()
+    );
   }, [products, activeTab]);
 
   const totalItems = filteredProducts.length;
@@ -55,7 +64,11 @@ export default function ProductsSectionComponent(): JSX.Element {
     const delta = 2;
     const range: (number | string)[] = [];
     for (let i = 1; i <= totalPages; i++) {
-      if (i === 1 || i === totalPages || (i >= currentPage - delta && i <= currentPage + delta)) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+      ) {
         range.push(i);
       } else if (range[range.length - 1] !== "...") {
         range.push("...");
@@ -68,16 +81,23 @@ export default function ProductsSectionComponent(): JSX.Element {
 
   return (
     <div className="w-full 2xl:px-[162px] md:px-[80px] px-[16px] pt-[200px]">
+      {/* global small CSS for hiding scrollbar on scrollable tracks */}
+      <style>{`
+        /* hide scrollbar (cross-browser) for the scrollable pagination track */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+
       <section className="border-2 border-dashed border-black15 rounded-xl flex flex-col">
         {/* Title & Tabs */}
         <div className="flex flex-col font-[var(--second-font)] overflow-hidden">
           <div className="relative">
+            {/* pass image only on md+ screens; hide it on <768 */}
             <TitleComponent
               title="Elevate Your Style with Our Latest Collection"
               desc="Each piece is crafted to enhance your fashion statement."
               fullImage={false}
-              img={"/assets/imgs/AbstractDesign.png"}
-              imgMobile={true}
+              img={isMdUp ? "/assets/imgs/AbstractDesign.png" : undefined}
             />
           </div>
 
@@ -99,9 +119,13 @@ export default function ProductsSectionComponent(): JSX.Element {
         </div>
 
         {/* Products */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  ">
-          {loading && <div className="col-span-full p-8 text-center">Loading products...</div>}
-          {error && <div className="col-span-full p-8 text-center text-red-600">{error}</div>}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          {loading && (
+            <div className="col-span-full p-8 text-center">Loading products...</div>
+          )}
+          {error && (
+            <div className="col-span-full p-8 text-center text-red-600">{error}</div>
+          )}
           {!loading &&
             !error &&
             paginatedProducts.map((product) => (
@@ -120,18 +144,22 @@ export default function ProductsSectionComponent(): JSX.Element {
         {/* Pagination */}
         {!loading && !error && totalPages > 1 && (
           <div className="mt-6 flex flex-col md:flex-row items-center justify-between p-3.5 gap-4">
-            <div className="text-sm text-gray-400">
-              Showing <span className="text-white">{Math.min(startIndex + 1, totalItems)}</span>
+            {/* info text - hide on small screens */}
+            <div className="text-sm text-gray-400 max-[540px]:hidden">
+              Showing{" "}
+              <span className="text-white">{Math.min(startIndex + 1, totalItems)}</span>
               {" — "}
               <span className="text-white">{Math.min(endIndex, totalItems)}</span>
               {" of "}
               <span className="text-white">{totalItems}</span>
             </div>
 
-            <div className="flex items-center gap-2">
+            {/* pagination controls */}
+            <div className="flex items-center gap-2 w-full md:w-auto">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
+                aria-label="Previous page"
                 className={`px-3 py-1 rounded-md border text-white border-white/10 ${
                   currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-white/5"
                 }`}
@@ -139,27 +167,34 @@ export default function ProductsSectionComponent(): JSX.Element {
                 Prev
               </button>
 
-              <div className="flex items-center gap-1">
-                {pageNumbers.map((num, idx) =>
-                  num === "..." ? (
-                    <span key={`dots-${idx}`} className="px-3 py-1 text-gray-400">...</span>
-                  ) : (
-                    <button
-                      key={num}
-                      onClick={() => setCurrentPage(Number(num))}
-                      className={`px-3 py-1 rounded-md border border-white/10 ${
-                        currentPage === num ? "bg-brown70 text-white" : "bg-transparent text-gray-200 hover:bg-white/5"
-                      }`}
-                    >
-                      {num}
-                    </button>
-                  )
-                )}
+              {/* scrollable page numbers track */}
+              <div className="flex-1 md:flex-none overflow-x-auto no-scrollbar">
+                <div className="inline-flex items-center gap-1 min-w-max px-1">
+                  {pageNumbers.map((num, idx) =>
+                    num === "..." ? (
+                      <span key={`dots-${idx}`} className="px-3 py-1 text-gray-400 select-none">
+                        ...
+                      </span>
+                    ) : (
+                      <button
+                        key={num}
+                        onClick={() => setCurrentPage(Number(num))}
+                        aria-current={currentPage === num ? "page" : undefined}
+                        className={`px-3 py-1 rounded-md border border-white/10 ${
+                          currentPage === num ? "bg-brown70 text-white" : "bg-transparent text-gray-200 hover:bg-white/5"
+                        }`}
+                      >
+                        {num}
+                      </button>
+                    )
+                  )}
+                </div>
               </div>
 
               <button
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
+                aria-label="Next page"
                 className={`px-3 py-1 rounded-md border text-white border-white/10 ${
                   currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "hover:bg-white/5"
                 }`}
