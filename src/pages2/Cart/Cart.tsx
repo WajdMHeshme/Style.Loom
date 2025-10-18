@@ -1,8 +1,8 @@
 // src/components/Cart/Cart.tsx
 import { useEffect, useState } from "react";
 import { GoX, GoArrowLeft } from "react-icons/go";
-import { useAppDispatch, useAppSelector } from "../redux/store/hooks";
-import { fetchCart, updateCartItem, removeCartItem } from "../redux/slices/cartSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/store/hooks";
+import { fetchCart, updateCartItem, removeCartItem } from "../../redux/slices/cartSlice";
 
 /**
  * Cart (optimistic updates)

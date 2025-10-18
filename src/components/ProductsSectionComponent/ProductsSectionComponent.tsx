@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type JSX } from "react";
 import ProductComponent from "./ProductComponent";
-import TitleComponent from "../TitleComponent/TitleComponent";
+import TitleComponent from "../shared/TitleComponent/TitleComponent";
 import { useAppDispatch, useAppSelector } from "../../redux/store/hooks";
 import { fetchProducts } from "../../redux/slices/productsSlice";
 

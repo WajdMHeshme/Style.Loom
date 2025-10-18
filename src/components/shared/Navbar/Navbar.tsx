@@ -3,8 +3,8 @@ import  { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiUserPlus } from "react-icons/fi";
 import { AiOutlineHeart } from "react-icons/ai";
-import { useAppSelector } from "../../redux/store/hooks";
-import UserAvatar from "../UserAvatar";
+import { useAppSelector } from "../../../redux/store/hooks";
+import UserAvatar from "../../UserAvatar";
 
 export default function Navbar() {
   const [activeLink, setActiveLink] = useState<string>(localStorage.getItem("activeLink") || "/");

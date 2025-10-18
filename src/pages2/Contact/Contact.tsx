@@ -1,9 +1,10 @@
-import ContactInfoComponent from "../components/ContactInfoComponent/ContactInfoComponent";
-import FAQComponent from "../components/FAQ/FAQSection";
-import TestimonialSection from "../components/Testimonials/TestimonialsSection";
-import ContactSection from "../components/ContactSection/ContactSection";
-import ReusableSectionTwo from "../components/ReusableSection"; // تأكد من المسار
-import { policiesData } from "../Data/PoliciesData"; // تأكد من مسار الداتا
+
+import ContactInfoComponent from "../../components/ContactInfoComponent/ContactInfoComponent";
+import ContactSection from "../../components/ContactSection/ContactSection";
+import ReusableSectionTwo from "../../components/ReusableSection";
+import FAQComponent from "../../components/shared/FAQ/FAQSection";
+import TestimonialSection from "../../components/shared/Testimonials/TestimonialsSection";
+import { policiesData } from "../../Data/PoliciesData";
 
 const Contact = () => {
   return (

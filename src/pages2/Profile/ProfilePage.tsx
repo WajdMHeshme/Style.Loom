@@ -1,10 +1,10 @@
 // src/pages/ProfilePage.tsx
 import { useEffect, useState, useCallback, type JSX } from "react";
 import { useNavigate } from "react-router-dom";
-import UserAvatar from "../components/UserAvatar";
+import UserAvatar from "../../components/UserAvatar";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
-import { useAppSelector } from "../redux/store/hooks";
-import LogoutPopup from "../utils/LogoutPopup"; // استدعاء البوب اب
+import { useAppSelector } from "../../redux/store/hooks";
+import LogoutPopup from "../../utils/LogoutPopup"; // استدعاء البوب اب
 
 type UserData = {
   id?: number;
