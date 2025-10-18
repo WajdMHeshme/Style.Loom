@@ -67,7 +67,7 @@ const SuccessMessage: React.FC<SuccessMessageProps> = ({
         }, autoCloseDelay);
       }
 
-      const onDocClick = (e: MouseEvent) => {
+      const onDocClick = () => {
         // close when click outside card OR anywhere on page (as you asked)
         handleDismiss();
       };

@@ -43,9 +43,14 @@ const LogoutPopup: React.FC<LogoutPopupProps> = ({
       {/* Card */}
       <div
         className={`relative rounded-2xl p-6 max-w-sm w-full shadow-2xl transition-all duration-300 transform ${
-          isAnimating ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"
+          isAnimating
+            ? "opacity-100 scale-100 translate-y-0"
+            : "opacity-0 scale-95 translate-y-4"
         }`}
-        style={{ background: "var(--color-black, #0f1720)", border: "1px solid rgba(194,180,163,0.18)" }}
+        style={{
+          background: "var(--color-black, #0f1720)",
+          border: "1px solid rgba(194,180,163,0.18)",
+        }}
       >
         {/* Icon - Logout */}
         <div className="flex justify-center mb-4">
