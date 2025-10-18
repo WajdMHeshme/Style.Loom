@@ -1,18 +1,13 @@
+// src/components/FAQComponent.tsx
 import { useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../redux/store/hooks";
+// thunk
+import { fetchFaqs } from "../../../redux/slices/faqSlice";
+import type { MappedFaq } from "../../../redux/slices/faqSlice";
 
-// Types
 interface Btn {
   filter: string;
   txt: string;
-}
-
-interface FaqApiItem {
-  id: number;
-  question: string;
-  answer: string;
-  category: string;
-  isActive: boolean;
-  createdAt: string;
 }
 
 export default function FAQComponent() {
@@ -24,87 +19,27 @@ export default function FAQComponent() {
     { filter: "Support", txt: "Support" },
   ];
 
+  const dispatch = useAppDispatch();
+  const { items: faqs, loading, error } = useAppSelector((s) => s.faq);
+
   const [activeBtn, setActiveBtn] = useState<string>("All");
   const [isHide, setIsHide] = useState<boolean>(true);
 
-  const [faqs, setFaqs] = useState<FaqApiItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
-  // ref array to store right-side card elements (one ref per pair)
-  // index: Math.floor(itemIndex / 2)
+  // refs for right-side cards (one ref per pair)
   const hideSideRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  function activeTab(filter: string) {
-    setActiveBtn(filter);
-  }
+  const activeTab = (filter: string) => setActiveBtn(filter);
 
-  // Reset refs and hide-state when category changes
+  // reset refs and hide-state when category changes
   useEffect(() => {
     hideSideRefs.current = [];
     setIsHide(true);
   }, [activeBtn]);
 
-  // helper: try to find token in multiple common places in localStorage
-  function getStoredToken(): string | null {
-    const possibleKeys = ["token", "accessToken", "authToken"];
-    for (const k of possibleKeys) {
-      const v = localStorage.getItem(k);
-      if (v) return v;
-    }
-    const userRaw = localStorage.getItem("user") || localStorage.getItem("auth");
-    if (userRaw) {
-      try {
-        const parsed = JSON.parse(userRaw);
-        return parsed?.token || parsed?.accessToken || null;
-      } catch {
-        // not JSON, ignore
-      }
-    }
-    return null;
-  }
-
-  // fetch FAQs from API with Authorization header if token exists
   useEffect(() => {
-    const controller = new AbortController();
-    async function fetchFaqs() {
-      setLoading(true);
-      setError(null);
-      try {
-        const token = getStoredToken();
+    dispatch(fetchFaqs());
+  }, [dispatch]);
 
-        const headers: Record<string, string> = {
-          "Content-Type": "application/json",
-        };
-        if (token) {
-          headers["Authorization"] = `Bearer ${token}`;
-        }
-
-        const res = await fetch("http://localhost:3000/api/dashboard/faq", {
-          signal: controller.signal,
-          headers,
-        });
-
-        if (res.status === 401) {
-          setError("Unauthorized (401). Please log in.");
-          return;
-        }
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-        const data: FaqApiItem[] = await res.json();
-        setFaqs(data);
-      } catch (err: any) {
-        if (err.name !== "AbortError") setError(err.message || "Fetch error");
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchFaqs();
-    return () => controller.abort();
-  }, []);
-
-  // toggle show/hide for right-side cards (used on small screens)
   const toggleAll = () => {
     const anyHidden = hideSideRefs.current.some(
       (ref) => !ref || ref.style.display !== "block"
@@ -121,10 +56,10 @@ export default function FAQComponent() {
 
   // prepare filtered list (consider only active items)
   const normalizedActive = activeBtn.toUpperCase();
-  const filtered = faqs.filter((f) => {
+  const filtered = faqs.filter((f: MappedFaq) => {
     if (!f.isActive) return false;
     if (normalizedActive === "ALL") return true;
-    return f.category?.toUpperCase() === normalizedActive;
+    return f.categoryUpper === normalizedActive;
   });
 
   return (
@@ -182,11 +117,9 @@ export default function FAQComponent() {
             <div className="p-8 w-full text-gray40">No FAQs found.</div>
           )}
 
-          {filtered.map((item, index) => {
-            // ref index for right-side items (odd indices)
+          {filtered.map((item: MappedFaq, index: number) => {
             const refIndex = Math.floor(index / 2);
 
-            // even index => left card; odd index => right card
             if (index % 2 === 0) {
               return (
                 <div
