@@ -1,7 +1,8 @@
 import React from "react";
-import TitleComponent from "../TitleComponent/TitleComponent";
+import TitleComponent from "../shared/TitleComponent/TitleComponent";
 import { ContactInfoData } from "../../Data/ContactInfoData";
-import TrendsCardComponent from "../../components/TrendsSectionComponent/TrendsCardComponent";
+import TrendsCardComponent from "../HomeComponents/TrendsSectionComponent/TrendsCardComponent";
+// import TrendsCardComponent from "../../components/TrendsSectionComponent/TrendsCardComponent";
 
 const ContactInfoComponent: React.FC = () => {
   return (
@@ -13,7 +14,7 @@ const ContactInfoComponent: React.FC = () => {
           desc="24/7 Assistance for Seamless Shopping and Unmatched Customer Satisfaction"
           img={"/assets/imgs/Vector2.webp"}
           fullImage={true}
-          hideImageBelowMd={true} // <- هذا السطر يخفي الصورة تحت 768px
+          // hideImageBelowMd={true} // <- هذا السطر يخفي الصورة تحت 768px
         />
       </div>
 

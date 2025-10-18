@@ -1,5 +1,6 @@
-import TitleComponent from "../TitleComponent/TitleComponent";
-import { stepsData } from "./../../Data/stepsData";
+import { stepsData } from "../../../Data/stepsData";
+import TitleComponent from "../../shared/TitleComponent/TitleComponent";
+// import { stepsData } from "./../../Data/stepsData";
 
 function StepsComponent() {
     return (

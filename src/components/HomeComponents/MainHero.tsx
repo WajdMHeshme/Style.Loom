@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { tabData } from "../Data/HeroCompData";
+import { tabData } from "../../Data/HeroCompData";
 import CountUp from "react-countup";
 import { Link } from "react-router-dom";
 

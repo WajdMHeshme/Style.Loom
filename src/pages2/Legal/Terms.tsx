@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { privacyData, contactInfo } from "../Data/TermsData";
-import { MdOutlinePrivacyTip } from "react-icons/md";
+// import { termsData, contactInfo } from "../Data/TermsData";
+import { CgLoadbarDoc } from "react-icons/cg";
+import { contactInfo, termsData } from "../../Data/TermsData";
 
-const PrivacyPolicy: React.FC = () => {
+const Terms: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -55,14 +56,14 @@ const PrivacyPolicy: React.FC = () => {
           <div className="text-center">
             <div
               className="mx-auto w-16 h-16 rounded-full mb-2 flex items-center justify-center bg-black20 border-2  border-brown60">
-              <MdOutlinePrivacyTip size={40} color="#ae9b84" />
+             <CgLoadbarDoc   size={40} color=" #ae9b84"/> 
             </div>
 
             <h1
               className="text-4xl font-bold mb-4"
               style={{ color: "var(--color-gray99)", fontFamily: "Roboto, sans-serif" }}
             >
-              Privacy Policy — Style.loom
+              Terms of Use — Style.loom
             </h1>
 
             <div
@@ -88,7 +89,7 @@ const PrivacyPolicy: React.FC = () => {
           }}
         >
           <div className="space-y-10">
-            {(privacyData || []).map((section: any) => (
+            {termsData.map((section) => (
               <section key={section.id}>
                 <div className="flex items-start space-x-4">
                   <div
@@ -96,7 +97,7 @@ const PrivacyPolicy: React.FC = () => {
                     style={{ background: "rgba(174,155,132,0.08)" }}
                   >
                     <span className="text-sm font-semibold" style={{ color: "var(--color-brown60)" }}>
-                      {(privacyData || []).indexOf(section) + 1}
+                      {termsData.indexOf(section) + 1}
                     </span>
                   </div>
 
@@ -107,27 +108,17 @@ const PrivacyPolicy: React.FC = () => {
 
                     {renderContent(section.content)}
                     {section.subsections && renderSubsections(section.subsections)}
-
-                    {section.id === "cookies" && (
+                    {section.id === "privacy" && (
                       <div
                         className="mt-4 p-4 rounded-lg"
                         style={{ background: "var(--color-black15)", border: "1px solid var(--color-black20)" }}
                       >
                         <p style={{ color: "var(--color-gray80)" }}>
-                          We use cookies and similar tracking technologies to improve your experience. You can manage
-                          cookie settings in your browser.
-                        </p>
-                      </div>
-                    )}
-
-                    {section.id === "third-parties" && (
-                      <div className="mt-4 p-4 rounded-lg" style={{ background: "var(--color-black15)", border: "1px solid var(--color-black20)" }}>
-                        <p style={{ color: "var(--color-gray80)" }}>
-                          For details about our Terms of Use, please see the{" "}
-                          <Link to="/terms" style={{ color: "var(--color-brown60)", textDecoration: "underline", fontWeight: 500 }}>
-                            Terms of Use
+                          Please review our{" "}
+                          <Link to="/privacy" style={{ color: "var(--color-brown60)", textDecoration: "underline", fontWeight: 500 }}>
+                            Privacy Policy
                           </Link>
-                          .
+                          , which explains how we collect and use information.
                         </p>
                       </div>
                     )}
@@ -181,14 +172,14 @@ const PrivacyPolicy: React.FC = () => {
             {/* Back */}
             <div className="text-center pt-6 border-t" style={{ borderColor: "var(--color-black20)" }}>
               <Link
-                to="/terms"
+                to="/"
                 className="inline-flex items-center px-6 py-3 rounded-xl font-semibold shadow"
                 style={{
                   background: "linear-gradient(90deg,var(--color-brown60),var(--color-brown65))",
                   color: "var(--color-gray97)",
                 }}
               >
-                Back to Terms
+                Back to Home
               </Link>
             </div>
           </div>
@@ -198,4 +189,5 @@ const PrivacyPolicy: React.FC = () => {
   );
 };
 
-export default PrivacyPolicy;
+export default Terms;
+

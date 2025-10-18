@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { StoredTrendsData } from "../../Data/TrendsData";
+import { StoredTrendsData } from "../../../Data/TrendsData";
 import TrendsCardComponent from "./TrendsCardComponent";
-import TitleComponent from "../TitleComponent/TitleComponent";
+import TitleComponent from "../../shared/TitleComponent/TitleComponent";
 
 export default function TrendsSectionComponent() {
     const [showLastThreeCards, setShowLastThreeCards] = useState(false);

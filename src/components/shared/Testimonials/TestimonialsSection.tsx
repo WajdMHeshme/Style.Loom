@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, type JSX } from "react";
 import axios from "axios";
 import TestimonialCard from "../Testimonials/TestimonalCard";
 import TitleComponent from "../TitleComponent/TitleComponent";
-import LoadingWave from "../../utils/Loader";
+import LoadingWave from "../../../utils/Loader";
 
 // ---- Types ----
 type ApiUser = {

@@ -1,5 +1,5 @@
 import InfinitScroll from './InfinitScroll'
-import { FooterColumnData, FooterMediaData, InfinitScrollData } from '../../Data/FooterData';
+import { FooterColumnData, FooterMediaData, InfinitScrollData } from '../../../Data/FooterData';
 import LogoSvg from './LogoSvg';
 import FooterMedia from './FooterMedia'
 import FooterColumn from './FooterColumn'

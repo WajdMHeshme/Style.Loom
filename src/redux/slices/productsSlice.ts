@@ -41,7 +41,6 @@ export const fetchProducts = createAsyncThunk("products/fetchAll", async (_, { r
         const data = await fetchProductsApi();
         return data as RawProduct[];
     } catch (err: any) {
-        // Normalise error message
         return rejectWithValue(err?.response?.data?.message || err.message || "Failed to fetch products");
     }
 });
@@ -50,7 +49,6 @@ const productsSlice = createSlice({
     name: "products",
     initialState,
     reducers: {
-        // لو بدك تعليمات إضافية لـ add/update/delete تقدر تضيف هنا
         clearProducts(state) {
             state.items = [];
             state.error = null;
@@ -66,8 +64,6 @@ const productsSlice = createSlice({
             .addCase(fetchProducts.fulfilled, (state, action: PayloadAction<RawProduct[]>) => {
                 state.loading = false;
                 state.error = null;
-
-                // map the data the same way كان عم تعمل في الكومبوننت
                 const mapped: MappedProduct[] = action.payload.map((p) => {
                     const rawImg = p.imageUrl ?? "";
                     const img =
@@ -83,7 +79,6 @@ const productsSlice = createSlice({
                     else if (mainName === "man" || mainName === "men") category = "Men";
                     else if (mainName === "woman" || mainName === "women") category = "Women";
                     else category = p.subCategory?.name ?? "Other";
-
                     return {
                         id: p.id,
                         img,

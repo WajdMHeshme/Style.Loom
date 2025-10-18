@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import ProductsSectionComponent from "../components/ProductsSectionComponent/ProductsSectionComponent";
-import FAQSection from "../components/FAQ/FAQSection";
-import InfoSection from "../components/InfoSection";
-import TestimonialSection from "../components/Testimonials/TestimonialsSection";
-import SuccessMessage from "../utils/SuccessMessageLogin";
+import ProductsSectionComponent from "../../components/ProductsSectionComponent/ProductsSectionComponent";
+import FAQSection from "../../components/shared/FAQ/FAQSection";
+import InfoSection from "../../components/InfoSection";
+import TestimonialSection from "../../components/shared/Testimonials/TestimonialsSection";
+import SuccessMessage from "../../utils/SuccessMessageLogin";
 
 const Products = () => {
   const [showPopup, setShowPopup] = useState(false);
