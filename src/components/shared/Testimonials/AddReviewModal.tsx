@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useId, useRef } from "react";
 import { useAppDispatch } from "../../../redux/store/hooks";
 import { addReview } from "../../../redux/slices/reviewsSlice";
 import type { MappedReview } from "../../../redux/slices/reviewsSlice";
@@ -20,6 +20,9 @@ export default function AddReviewModal({
   const [comment, setComment] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const id = useId();
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const starGroupRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!isOpen) {
@@ -29,11 +32,9 @@ export default function AddReviewModal({
       setError(null);
       setSubmitting(false);
     } else {
+      // focus textarea after opening
       setTimeout(() => {
-        const el = document.querySelector<HTMLTextAreaElement>(
-          "textarea[aria-label='Review comment']"
-        );
-        el?.focus();
+        textareaRef.current?.focus();
       }, 120);
     }
   }, [isOpen]);
@@ -122,61 +123,167 @@ export default function AddReviewModal({
     }
   };
 
+  // keyboard navigation for stars
+  const handleStarsKeyDown = (e: React.KeyboardEvent) => {
+    if (["ArrowLeft", "ArrowDown"].includes(e.key)) {
+      e.preventDefault();
+      setRating((r) => Math.max(1, r - 1));
+    } else if (["ArrowRight", "ArrowUp"].includes(e.key)) {
+      e.preventDefault();
+      setRating((r) => Math.min(5, r + 1));
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      setRating(1);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      setRating(5);
+    } else if (e.key === "Enter" || e.key === " ") {
+      // space/enter handled by button itself
+    }
+  };
+
   if (!isOpen) return null;
 
+  const gradId = `starGrad-${id}`;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      aria-hidden={!isOpen}
+    >
+      {/* backdrop */}
       <div
         onClick={() => !submitting && startClose()}
-        className="absolute inset-0"
+        className="absolute inset-0 transition-opacity duration-200"
         style={{
-          backgroundColor: "rgba(7,7,8,0.55)",
-          backdropFilter: "blur(3px)",
+          background:
+            "linear-gradient(180deg, rgba(7,7,8,0.6) 0%, rgba(7,7,8,0.5) 100%)",
+          backdropFilter: "blur(6px)",
         }}
       />
+
+      {/* modal */}
       <div
         role="dialog"
         aria-modal="true"
-        className="relative w-full max-w-md mx-auto rounded-3xl overflow-hidden shadow-2xl"
+        className="relative w-full max-w-lg mx-auto rounded-3xl overflow-hidden shadow-2xl transform transition-all duration-200 ease-out scale-100"
         style={{ background: "var(--color-black12)" }}
       >
         <div className="p-6">
-          <h2 className="text-2xl font-semibold mb-4 text-white">
-            Add Your Review
-          </h2>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-semibold mb-1 text-white">
+                Add Your Review
+              </h2>
+              <p className="text-sm text-neutral-400">
+                Share your experience — it helps others decide.
+              </p>
+            </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="flex items-center gap-2">
+              <div className="text-sm text-neutral-400 mr-2">
+                <span className="font-semibold text-white">{rating}</span>/5
+              </div>
+              <button
+                onClick={() => !submitting && startClose()}
+                aria-label="Close review modal"
+                className="p-2 rounded-lg hover:bg-black/20 transition"
+                title="Close"
+                disabled={submitting}
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="text-white"
+                >
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5 mt-5">
             {/* Rating Stars */}
             <div>
-              <label className="block text-sm font-medium mb-2 text-white">
+              <label
+                className="block text-sm font-medium mb-3 text-white"
+                id="rating-label"
+              >
                 Rating
               </label>
-              <div className="flex items-center gap-3">
-                {[1, 2, 3, 4, 5].map((i) => {
-                  const filled = (hoverRating ?? rating) >= i;
-                  return (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => setRating(i)}
-                      onMouseEnter={() => setHoverRating(i)}
-                      onMouseLeave={() => setHoverRating(null)}
-                      className="transition-transform transform hover:scale-125 hover:-translate-y-1"
-                    >
-                      <svg
-                        width="32"
-                        height="32"
-                        viewBox="0 0 24 24"
-                        fill={filled ? "var(--color-brown60)" : "none"}
-                        stroke={filled ? "var(--color-brown60)" : "currentColor"}
-                        strokeWidth="1.5"
-                        className="drop-shadow-md"
+
+              <div
+                ref={starGroupRef}
+                role="radiogroup"
+                aria-labelledby="rating-label"
+                tabIndex={0}
+                onKeyDown={handleStarsKeyDown}
+                className="flex items-center gap-4"
+              >
+                <svg style={{ height: 0, width: 0 }} aria-hidden>
+                  <defs>
+                    <linearGradient id={gradId} x1="0%" x2="100%">
+                      <stop offset="0%" stopColor="var(--color-brown60)" stopOpacity="1" />
+                      <stop offset="100%" stopColor="#ffd27f" stopOpacity="1" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+
+                <div className="flex items-center gap-3">
+                  {[1, 2, 3, 4, 5].map((i) => {
+                    const filled = (hoverRating ?? rating) >= i;
+                    return (
+                      <button
+                        key={i}
+                        type="button"
+                        role="radio"
+                        aria-checked={rating === i}
+                        aria-label={`${i} star${i > 1 ? "s" : ""}`}
+                        title={`${i} star${i > 1 ? "s" : ""}`}
+                        onClick={() => setRating(i)}
+                        onMouseEnter={() => setHoverRating(i)}
+                        onMouseLeave={() => setHoverRating(null)}
+                        onFocus={() => setHoverRating(i)}
+                        onBlur={() => setHoverRating(null)}
+                        className={`p-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown60 transition-transform transform ${
+                          filled ? "scale-105" : "hover:scale-110"
+                        }`}
+                        style={{
+                          // make button size stable
+                          width: 44,
+                          height: 44,
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        disabled={submitting}
                       >
-                        <path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.174L12 18.896l-7.336 3.876 1.402-8.174L.132 9.21l8.2-1.192L12 .587z" />
-                      </svg>
-                    </button>
-                  );
-                })}
+                        <svg
+                          width="34"
+                          height="34"
+                          viewBox="0 0 24 24"
+                          fill={filled ? `url(#${gradId})` : "none"}
+                          stroke={filled ? `url(#${gradId})` : "currentColor"}
+                          strokeWidth="1.4"
+                          className={`drop-shadow-md ${
+                            filled ? "" : "text-neutral-300"
+                          }`}
+                        >
+                          <path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.174L12 18.896l-7.336 3.876 1.402-8.174L.132 9.21l8.2-1.192L12 .587z" />
+                        </svg>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* numeric label */}
+                <div className="ml-2 text-sm text-neutral-300">
+                  <span className="text-white font-semibold">{rating}</span> out of 5
+                </div>
               </div>
             </div>
 
@@ -188,13 +295,18 @@ export default function AddReviewModal({
               <textarea
                 aria-label="Review comment"
                 rows={4}
+                ref={textareaRef}
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                className="w-full rounded-xl border border-black15 p-3 resize-none focus:outline-none focus:ring-2 focus:ring-brown60 bg-black text-white"
+                className="w-full rounded-2xl border border-black15 p-4 resize-none focus:outline-none focus:ring-2 focus:ring-brown60 bg-black text-white placeholder:text-neutral-500 shadow-sm"
                 disabled={submitting}
                 placeholder="Write your review..."
                 required
               />
+              <div className="mt-2 flex justify-between items-center text-xs text-neutral-400">
+                <div>{comment.length} characters</div>
+                <div>Be kind and specific ✨</div>
+              </div>
             </div>
 
             {error && <div className="text-sm text-red-400">{error}</div>}
@@ -212,7 +324,7 @@ export default function AddReviewModal({
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-6 py-2 rounded-lg bg-brown60 text-white font-semibold hover:bg-opacity-90 transition"
+                className="px-6 py-2 rounded-lg bg-gradient-to-r from-[var(--color-brown60)] to-[#ffd27f] text-black font-semibold hover:opacity-95 transition transform active:scale-98"
               >
                 {submitting ? "Submitting..." : "Submit Review"}
               </button>
